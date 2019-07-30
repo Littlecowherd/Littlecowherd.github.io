@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>小酒馆</title>
-    <updated>2019-07-30T06:56:53.703Z</updated>
+    <updated>2019-07-30T08:03:08.981Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -103,7 +103,7 @@ requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Req
 <h2 id="参考链接">参考链接</h2>
 <ol>
 <li><a href="https://github.com/benfred/py-spy">py-spy 的官方地址</a></li>
-<li><a href="https://pythonhunter.org/episodes/2">Ep 02. 开发中的碎碎念 ——捕蛇者说》</a></li>
+<li><a href="https://pythonhunter.org/episodes/2">Ep 02. 开发中的碎碎念 ——《捕蛇者说》</a></li>
 <li><a href="https://2.python-requests.org//zh_CN/latest/user/quickstart.html#id10">超时 ——Requests 官方文档</a></li>
 </ol>
 ]]></content>
