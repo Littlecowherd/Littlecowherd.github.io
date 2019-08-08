@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>小酒馆</title>
-    <updated>2019-08-01T09:39:33.386Z</updated>
+    <updated>2019-08-08T08:54:39.201Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -10,6 +10,67 @@
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, 小酒馆</rights>
+    <entry>
+        <title type="html"><![CDATA[删除Git仓库的所有历史提交记录]]></title>
+        <id>https://Littlecowherd.github.io/post/ko1lNI3Ex</id>
+        <link href="https://Littlecowherd.github.io/post/ko1lNI3Ex">
+        </link>
+        <updated>2019-08-08T10:53:23.000Z</updated>
+        <content type="html"><![CDATA[<p>在开发项目过程中，很可能在提交 git  时泄露了一些敏感信息，本地尚且无妨。倘若要同步到 GitHub 等公开平台，那就一定要消除这些信息。</p>
+<p><strong>操作方式如下：</strong></p>
+<blockquote>
+<p>Deleting the <code>.git</code> folder may cause problems in your git repository. If you want to delete all your commit history but keep the code in its current state, it is very safe to do it as in the following:</p>
+<p>删除 .git 文件夹可能会导致 git 存储库出现问题。如果要删除所有提交历史记录但保持代码处于当前状态，则执行此操作非常安全，如下所示：</p>
+<ol>
+<li>
+<p>Checkout</p>
+<p><code>git checkout --orphan latest_branch</code></p>
+</li>
+<li>
+<p>Add all the files</p>
+<p><code>git add -A</code></p>
+</li>
+<li>
+<p>Commit the changes</p>
+<p><code>git commit -am &quot;commit message&quot;</code></p>
+</li>
+<li>
+<p>Delete the branch</p>
+<p><code>git branch -D master</code></p>
+</li>
+<li>
+<p>Rename the current branch to master</p>
+<p><code>git branch -m master</code></p>
+</li>
+<li>
+<p>Finally, force update your repository</p>
+<p><code>git push -f origin master</code></p>
+</li>
+</ol>
+<p>PS: this will not keep your old commit history around</p>
+</blockquote>
+<p>这组命令对于发布开源分支来说很有帮助，新的分支含有之前的全部代码但不包含之前的提交记录，就算你不小心把敏感信息提交到了 GitHub，也可以用它来亡羊补牢。</p>
+<p><strong>命令说明</strong></p>
+<blockquote>
+<p><code>git checkout --orphan &lt;new_branch&gt;</code></p>
+<p>Create a new <em>orphan</em> branch, named &lt;new_branch&gt;, started from &lt;start_point&gt; and switch to it. The first commit made on this new branch will have no parents and it will be the root of a new history totally disconnected from all the other branches and commits.</p>
+<p>创建一个名为 &lt;new_branch&gt; 的新<em>孤立</em>分支，从 &lt;start_point&gt; 启动并切换到该分支。在这个新分支上进行的第一次提交将没有父项，它将成为与所有其他分支和提交完全断开的新历史的根。</p>
+</blockquote>
+<p>大致意思就是：创建一个名为  &lt;new_branch&gt;  的 全新的<em>孤立</em>分支，可以当成一个全新的根节点。</p>
+<p><strong>参考链接</strong></p>
+<ol>
+<li>
+<p><a href="https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github">how to delete all commit history in github? </a></p>
+</li>
+<li>
+<p><a href="https://www.jianshu.com/p/cad4d2ec4da5">Git checkout 用法总结</a></p>
+</li>
+<li>
+<p><a href="https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---orphanltnewbranchgt">checkout - Git 官方文档</a></p>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ py-spy常见问题及使用说明]]></title>
         <id>https://Littlecowherd.github.io/post/TICCX3MX-</id>
