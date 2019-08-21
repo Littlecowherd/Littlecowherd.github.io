@@ -6,7 +6,7 @@
         <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
         <meta content="telephone=no" name="format-detection"/>
         <meta name="renderer" content="webkit">
-    <title>Hello Gridea | 小酒馆</title>
+    <title> 关于Requests代理，你必须知道的 | 小酒馆</title>
 <link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/jquery.js"></script>
 <script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/basic.js"></script>
@@ -147,7 +147,7 @@
 
 <div class="post">
   <div class="post_title sm_margin">
-    <h2><a>Hello Gridea</a>
+    <h2><a> 关于Requests代理，你必须知道的</a>
 
 
 
@@ -156,7 +156,7 @@
 
   <div class="post_details">
     <div class="info"><i class="fa fa-clock-o"></i>
-<span class="date_info">2018-12-12</span>
+<span class="date_info">2019-08-21</span>
 <i class="fa fa-eye"></i>
 
 <span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
@@ -165,8 +165,6 @@
 <i class="fa fa-bookmark-o"></i>
 <span class="tags_info weaklink">
 	
-	<a href="https://Littlecowherd.github.io/tag/gridea" class="tag">Gridea</a>
-
 
 </span>
 
@@ -180,27 +178,98 @@
 
 
   <div class="post_content markdown"><p class="md_block">
-    <span class="md_line md_line_start md_line_end"><p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="http://hvenotes.fehey.com/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>𝖶𝗂𝗇𝖽𝗈𝗐𝗌</strong> 或 <strong>𝖬𝖺𝖼𝖮𝖲</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+    <span class="md_line md_line_start md_line_end"><p>说到代理，写过爬虫的小伙伴一定都不陌生。但是<strong>你的代理真的生效了么</strong>？</p>
+<p>代理主要分为以下几类：</p>
+<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类"></p>
+<p>如果是爬虫的话，最常见的选择是高匿代理。</p>
+<p>Requests 设置代理非常方便，只需传递一个 proxies 参数即可。如官方示例：</p>
+<pre><code class="language-Python">import requests
+
+proxies = {
+  'http': 'http://10.10.1.10:3128',
+  'https': 'http://10.10.1.10:1080',
+}
+
+requests.get('http://example.org', proxies=proxies)
+</code></pre>
+<p>留意一个地方，proxies 字典中有两个 key ：https 和 http，为什么要写两个 key，如果只有一个可以么？</p>
+<h2 id="试试就知道了">试试就知道了</h2>
+<h3 id="准备验证函数">准备验证函数</h3>
+<p>这个函数会使用代理去访问两个 IP 验证网站，一个是 https，一个是 http。</p>
+<pre><code class="language-Python">import requests
+from bs4 import BeautifulSoup
+
+
+def validate(proxies):
+    https_url = 'https://ip.cn'
+    http_url = 'http://ip111.cn/'
+    headers = {'User-Agent': 'curl/7.29.0'}
+    https_r = requests.get(https_url, headers=headers, proxies=proxies, timeout=10)
+    http_r = requests.get(http_url, headers=headers, proxies=proxies, timeout=10)
+    soup = BeautifulSoup(http_r.content, 'html.parser')
+    result = soup.find(class_='card-body').get_text().strip().split('''\n''')[0]
+
+    print(f&quot;当前使用代理：{proxies.values()}&quot;)
+    print(f&quot;访问https网站使用代理：{https_r.json()}&quot;)
+    print(f&quot;访问http网站使用代理：{result}&quot;)
+</code></pre>
+<h3 id="测试">测试</h3>
+<ul>
+<li>
+<p>Case 1</p>
+<pre><code class="language-Python">proxies = {
+    'http': '222.189.244.56:48304',
+    'https': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304', '222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '222.189.244.56', 'country': '江苏省扬州市', 'city': '电信'}
+访问http网站使用代理：222.189.244.56 China / Nanjing
+</code></pre>
+<p>结果： <em>访问两个网站均使用了代理</em></p>
+</li>
+<li>
+<p>Case 2</p>
+<pre><code class="language-python">proxies = {
+    'http': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '118.24.234.46', 'country': '重庆市', 'city': '腾讯'}
+访问http网站使用代理：222.189.244.56 China / Nanjing
+</code></pre>
+<p>结果： <em>只有http请求使用了代理</em></p>
+</li>
+<li>
+<p>Case 3</p>
+<pre><code class="language-python">proxies = {
+    'https': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '222.189.244.56', 'country': '江苏省扬州市', 'city': '电信'}
+访问http网站使用代理：118.24.234.46 China / Nanning
+</code></pre>
+<p>结果： <em>只有https请求使用了代理</em></p>
+</li>
+</ul>
+<h3 id="其他测试">其他测试</h3>
+<p>通过 wireshark 抓包发现，当协议不匹配时，根本不会向代理服务器发起请求。</p>
+<p>通过 postman 测试，结果与 Requests 一致，协议不同的情况下，不会走代理。</p>
+<p>猜测可能是一种约定或者规则，类似 PAC ？（如果你知道答案，请告诉我）</p>
+<h3 id="结论">结论</h3>
+<p><mark>在 Requests 中，代理必须和目标网站具有相同的协议（http / https）的时候，才能生效。</mark></p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://blog.51cto.com/14062184/2315723">什么是透明、匿名、高匿代理？详解！</a></li>
+<li><a href="">HTTP代理和HTTPS代理的区别</a></li>
+</ul>
 </p>
 
      <p class="md_block">

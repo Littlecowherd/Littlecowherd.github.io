@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>小酒馆</title>
-    <updated>2019-08-08T09:03:44.560Z</updated>
+    <updated>2019-08-21T02:57:54.310Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -10,6 +10,106 @@
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, 小酒馆</rights>
+    <entry>
+        <title type="html"><![CDATA[ 关于Requests代理，你必须知道的]]></title>
+        <id>https://Littlecowherd.github.io/post/JdmtOALbL</id>
+        <link href="https://Littlecowherd.github.io/post/JdmtOALbL">
+        </link>
+        <updated>2019-08-21T02:55:55.000Z</updated>
+        <content type="html"><![CDATA[<p>说到代理，写过爬虫的小伙伴一定都不陌生。但是<strong>你的代理真的生效了么</strong>？</p>
+<p>代理主要分为以下几类：</p>
+<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类"></p>
+<p>如果是爬虫的话，最常见的选择是高匿代理。</p>
+<p>Requests 设置代理非常方便，只需传递一个 proxies 参数即可。如官方示例：</p>
+<pre><code class="language-Python">import requests
+
+proxies = {
+  'http': 'http://10.10.1.10:3128',
+  'https': 'http://10.10.1.10:1080',
+}
+
+requests.get('http://example.org', proxies=proxies)
+</code></pre>
+<p>留意一个地方，proxies 字典中有两个 key ：https 和 http，为什么要写两个 key，如果只有一个可以么？</p>
+<h2 id="试试就知道了">试试就知道了</h2>
+<h3 id="准备验证函数">准备验证函数</h3>
+<p>这个函数会使用代理去访问两个 IP 验证网站，一个是 https，一个是 http。</p>
+<pre><code class="language-Python">import requests
+from bs4 import BeautifulSoup
+
+
+def validate(proxies):
+    https_url = 'https://ip.cn'
+    http_url = 'http://ip111.cn/'
+    headers = {'User-Agent': 'curl/7.29.0'}
+    https_r = requests.get(https_url, headers=headers, proxies=proxies, timeout=10)
+    http_r = requests.get(http_url, headers=headers, proxies=proxies, timeout=10)
+    soup = BeautifulSoup(http_r.content, 'html.parser')
+    result = soup.find(class_='card-body').get_text().strip().split('''\n''')[0]
+
+    print(f&quot;当前使用代理：{proxies.values()}&quot;)
+    print(f&quot;访问https网站使用代理：{https_r.json()}&quot;)
+    print(f&quot;访问http网站使用代理：{result}&quot;)
+</code></pre>
+<h3 id="测试">测试</h3>
+<ul>
+<li>
+<p>Case 1</p>
+<pre><code class="language-Python">proxies = {
+    'http': '222.189.244.56:48304',
+    'https': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304', '222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '222.189.244.56', 'country': '江苏省扬州市', 'city': '电信'}
+访问http网站使用代理：222.189.244.56 China / Nanjing
+</code></pre>
+<p>结果： <em>访问两个网站均使用了代理</em></p>
+</li>
+<li>
+<p>Case 2</p>
+<pre><code class="language-python">proxies = {
+    'http': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '118.24.234.46', 'country': '重庆市', 'city': '腾讯'}
+访问http网站使用代理：222.189.244.56 China / Nanjing
+</code></pre>
+<p>结果： <em>只有http请求使用了代理</em></p>
+</li>
+<li>
+<p>Case 3</p>
+<pre><code class="language-python">proxies = {
+    'https': '222.189.244.56:48304'
+}
+validate(proxies)
+</code></pre>
+<p>输出</p>
+<pre><code>当前使用代理：dict_values(['222.189.244.56:48304'])
+访问https网站使用代理：{'ip': '222.189.244.56', 'country': '江苏省扬州市', 'city': '电信'}
+访问http网站使用代理：118.24.234.46 China / Nanning
+</code></pre>
+<p>结果： <em>只有https请求使用了代理</em></p>
+</li>
+</ul>
+<h3 id="其他测试">其他测试</h3>
+<p>通过 wireshark 抓包发现，当协议不匹配时，根本不会向代理服务器发起请求。</p>
+<p>通过 postman 测试，结果与 Requests 一致，协议不同的情况下，不会走代理。</p>
+<p>猜测可能是一种约定或者规则，类似 PAC ？（如果你知道答案，请告诉我）</p>
+<h3 id="结论">结论</h3>
+<p><mark>在 Requests 中，代理必须和目标网站具有相同的协议（http / https）的时候，才能生效。</mark></p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://blog.51cto.com/14062184/2315723">什么是透明、匿名、高匿代理？详解！</a></li>
+<li><a href="">HTTP代理和HTTPS代理的区别</a></li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[删除Git仓库的所有历史提交记录]]></title>
         <id>https://Littlecowherd.github.io/post/ko1lNI3Ex</id>
