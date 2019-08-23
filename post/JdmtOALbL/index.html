@@ -19,7 +19,7 @@
      <div class="header">
       <div class="logo_title">
 		  
-        <div class="title animated fadeInDown"><img src="https://Littlecowherd.github.io/images/avatar.png?v=1566356214155"/>
+        <div class="title animated fadeInDown"><img src="https://Littlecowherd.github.io/images/avatar.png?v=1566539833306"/>
 
           <h1 title="小酒馆" class="weaklink"><a href="/">小酒馆</a>
 
@@ -165,6 +165,14 @@
 <i class="fa fa-bookmark-o"></i>
 <span class="tags_info weaklink">
 	
+	<a href="https://Littlecowherd.github.io/tag/FpmjHZm3J" class="tag">Requests</a>
+
+	<a href="https://Littlecowherd.github.io/tag/BSgqZzFiuE" class="tag">代理</a>
+
+	<a href="https://Littlecowherd.github.io/tag/SGCpX-DtN0" class="tag">proxy</a>
+
+	<a href="https://Littlecowherd.github.io/tag/YY-86xwMCe" class="tag">Python</a>
+
 
 </span>
 
@@ -262,13 +270,121 @@ validate(proxies)
 <h3 id="其他测试">其他测试</h3>
 <p>通过 wireshark 抓包发现，当协议不匹配时，根本不会向代理服务器发起请求。</p>
 <p>通过 postman 测试，结果与 Requests 一致，协议不同的情况下，不会走代理。</p>
-<p>猜测可能是一种约定或者规则，类似 PAC ？（如果你知道答案，请告诉我）</p>
-<h3 id="结论">结论</h3>
-<p><mark>在 Requests 中，代理必须和目标网站具有相同的协议（http / https）的时候，才能生效。</mark></p>
+<p><s>猜测可能是一种约定或者规则，类似 PAC ？（如果你知道答案，请告诉我）</s></p>
+<h2 id="寻找答案">寻找答案</h2>
+<p>从源码入手试试？在<code>requests.ultis</code> 中找到了这个函数：</p>
+<pre><code class="language-Python">def select_proxy(url, proxies):
+    &quot;&quot;&quot;Select a proxy for the url, if applicable.
+
+    :param url: The url being for the request
+    :param proxies: A dictionary of schemes or schemes and hosts to proxy URLs
+    &quot;&quot;&quot;
+    proxies = proxies or {}
+    urlparts = urlparse(url)
+    if urlparts.hostname is None:
+        return proxies.get(urlparts.scheme, proxies.get('all'))
+
+    proxy_keys = [
+        urlparts.scheme + '://' + urlparts.hostname,
+        urlparts.scheme,
+        'all://' + urlparts.hostname,
+        'all',
+    ]
+    proxy = None
+    for proxy_key in proxy_keys:
+        if proxy_key in proxies:
+            proxy = proxies[proxy_key]
+            break
+
+    return proxy
+</code></pre>
+<p>答案揭晓了，**Requests 会根据目标 url 的协议按照一定顺序来为它选择代理。**就拿上面的 Case 2 来说：</p>
+<pre><code class="language-Python">proxies = {
+    'http': '222.189.244.56:48304'
+}
+</code></pre>
+<p>请求<code>http://ip111.cn/</code>时，按照以下顺序在 proxies 字典中为这个链接选用代理：</p>
+<ol>
+<li>协议+域名 ：<code>http://222.189.244.56</code></li>
+<li>协议：<code>http</code></li>
+<li>all + 域名：<code>all://222.189.244.56</code></li>
+<li>all：<code>all</code></li>
+</ol>
+<p>在第 2 步匹配到<code>222.189.244.56:48304</code>，然后就使用这个代理去访问目标地址。</p>
+<p>而在请求<code>https://ip.cn</code>时，按照上面顺序匹配不到任何内容，就使用本地的 ip 去访问目标地址了。</p>
+<p>这样也就能说明上面 3 个例子了。</p>
+<h2 id="扩展">扩展</h2>
+<p>官方示例中的代理包含协议，而我们测试的例子中没有但同样能够成功访问。这又是为什么呢？</p>
+<pre><code class="language-Python"># 官方的
+proxies = {
+  'http': 'http://10.10.1.10:3128',
+  'https': 'http://10.10.1.10:1080',
+}
+# 我们的
+proxies = {
+    'http': '222.189.244.56:48304',
+    'https': '222.189.244.56:48304'
+}
+</code></pre>
+<p>答案同样可以在源码里找到，请看下面这两个函数：</p>
+<p><code>requests.apdpters</code></p>
+<pre><code class="language-Python">def get_connection(self, url, proxies=None):
+    &quot;&quot;&quot;Returns a urllib3 connection for the given URL. This should not be
+    called from user code, and is only exposed for use when subclassing the
+    :class:`HTTPAdapter &lt;requests.adapters.HTTPAdapter&gt;`.
+
+    :param url: The URL to connect to.
+    :param proxies: (optional) A Requests-style dictionary of proxies used on this request.
+    :rtype: urllib3.ConnectionPool
+    &quot;&quot;&quot;
+    proxy = select_proxy(url, proxies)
+
+    if proxy:
+        proxy = prepend_scheme_if_needed(proxy, 'http')
+        proxy_url = parse_url(proxy)
+        if not proxy_url.host:
+            raise InvalidProxyURL(&quot;Please check proxy URL. It is malformed&quot;
+                                    &quot; and could be missing the host.&quot;)
+        proxy_manager = self.proxy_manager_for(proxy)
+        conn = proxy_manager.connection_from_url(url)
+    else:
+        # Only scheme should be lower case
+        parsed = urlparse(url)
+        url = parsed.geturl()
+        conn = self.poolmanager.connection_from_url(url)
+
+    return conn
+</code></pre>
+<p>看这一行代码：<code>proxy = prepend_scheme_if_needed(proxy, 'http')</code>，找到这个函数的定义:</p>
+<pre><code class="language-python">def prepend_scheme_if_needed(url, new_scheme):
+    &quot;&quot;&quot;Given a URL that may or may not have a scheme, prepend the given scheme.
+    Does not replace a present scheme with the one provided as an argument.
+
+    :rtype: str
+    &quot;&quot;&quot;
+    scheme, netloc, path, params, query, fragment = urlparse(url, new_scheme)
+
+    # urlparse is a finicky beast, and sometimes decides that there isn't a
+    # netloc present. Assume that it's being over-cautious, and switch netloc
+    # and path if urlparse decided there was no netloc.
+    if not netloc:
+        netloc, path = path, netloc
+
+    return urlunparse((scheme, netloc, path, params, query, fragment))
+</code></pre>
+<p>从注释中可以找到答案：</p>
+<p><strong>如果代理提供了协议，不做改变；如果代理没有协议的话，就为代理加上<code>http</code>协议。</strong></p>
+<h2 id="结论">结论</h2>
+<ol>
+<li>Requests 会按照目标url的协议来为它配置代理。基于此你可以为不同的协议甚至不同域名设置不同的代理，如果想为所有请求使用同一个代理，那直接使用 all 作为 key 来设置即可。</li>
+<li>代理地址如果没有指明协议，则默认使用 http 请求。</li>
+</ol>
 <h2 id="参考链接">参考链接</h2>
 <ul>
+<li><a href="https://imququ.com/post/web-proxy.html">HTTP 代理原理及实现（一）</a></li>
+<li><a href="https://imququ.com/post/web-proxy-2.html">HTTP 代理原理及实现（二）</a></li>
 <li><a href="https://blog.51cto.com/14062184/2315723">什么是透明、匿名、高匿代理？详解！</a></li>
-<li><a href="">HTTP代理和HTTPS代理的区别</a></li>
+<li><a href="https://www.hitoy.org/difference-between-http-and-https-proxy.html">HTTP代理和HTTPS代理的区别</a></li>
 </ul>
 </p>
 
