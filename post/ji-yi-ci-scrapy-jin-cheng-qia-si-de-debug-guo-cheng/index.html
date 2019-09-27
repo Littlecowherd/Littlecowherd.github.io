@@ -1,190 +1,111 @@
-
+<!DOCTYPE html>
 <html>
-  <head lang="zh">
-        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-        <meta content="yes" name="apple-mobile-web-app-capable"/>
-        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-        <meta content="telephone=no" name="format-detection"/>
-        <meta name="renderer" content="webkit">
-    <title> 记一次Scrapy进程卡死的Debug过程 | 小酒馆</title>
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/jquery.js"></script>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/basic.js"></script>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+  <head>
+    <meta charset="utf-8" >
+
+<title> 记一次Scrapy进程卡死的Debug过程 | 小酒馆</title>
+<meta name="description" content="从前有个人的小酒馆">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1569571195300">
+<link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
 
   </head>
-
   <body>
-     <div class="header">
-      <div class="logo_title">
-		  
-        <div class="title animated fadeInDown"><img src="https://Littlecowherd.github.io/images/avatar.png?v=1566539833306"/>
+    <div id="app" class="main">
 
-          <h1 title="小酒馆" class="weaklink"><a href="/">小酒馆</a>
-
-          </h1>
-
-          <div class="navbar weaklink">
-            <div class="normal_nav">
-
-<div class="bitcron_nav_container">
-
-
-  <div class="bitcron_nav">
-    <div class="mixed_site_nav_wrap site_nav_wrap">
-		
-      <ul class="mixed_site_nav site_nav sm sm-base">
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://Littlecowherd.github.io" class="selected active current nav__item" >首页</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/archives" class="selected active current nav__item" >归档</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/tags" class="selected active current nav__item" >标签</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/post/about" class="selected active current nav__item" >关于</a>
-
-  </li>
- 
-
-      </ul>
-
-      <div class="clear clear_nav_inline_end"></div>
-
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Littlecowherd.github.io">
+        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1569571195300" class="site-logo">
+        <h1 class="site-title">小酒馆</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-
+    <div>
+      
+        
+          <a href="https://Littlecowherd.github.io" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
   </div>
-
-
-
-  <div class="clear clear_nav_end"></div>
-
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Littlecowherd" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      从前有个人的小酒馆
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+  </div>
 </div>
 
-            </div>
 
-            <div class="hamberger"><i class="fa fa-bars"></i>
-<i class="fa fa-times"></i>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="hidden_nav animated fadeInDown">
-
-<div class="bitcron_nav_container">
-
-
-  <div class="bitcron_nav">
-    <div class="mixed_site_nav_wrap site_nav_wrap">
-      <ul class="mixed_site_nav site_nav sm sm-base">
-		  
-	
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://Littlecowherd.github.io" class="selected active current nav__item" >首页</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/archives" class="selected active current nav__item" >归档</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/tags" class="selected active current nav__item" >标签</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/post/about" class="selected active current nav__item" >关于</a>
-
-  </li>
-
-
-
-
-
-      </ul>
-
-      <div class="clear clear_nav_inline_end"></div>
-
-    </div>
-
-  </div>
-
-
-
-  <div class="clear clear_nav_end"></div>
-
-</div>
-
-      </div>
-
-    </div>
-
-
-    <div class="main">
-      <div class="main-inner">
-
-
-<div class="content">
-
-
-
-
-
-
-  <div class="post_page" >
-
-<div class="post">
-  <div class="post_title sm_margin">
-    <h2><a> 记一次Scrapy进程卡死的Debug过程</a>
-
-
-
-    </h2>
-  </div>
-
-  <div class="post_details">
-    <div class="info"><i class="fa fa-clock-o"></i>
-<span class="date_info">2019-07-30</span>
-<i class="fa fa-eye"></i>
-
-<span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
-
-
-<i class="fa fa-bookmark-o"></i>
-<span class="tags_info weaklink">
-	
-	<a href="https://Littlecowherd.github.io/tag/0N8PjAb__" class="tag">Scrapy</a>
-
-	<a href="https://Littlecowherd.github.io/tag/YY-86xwMCe" class="tag">Python</a>
-
-	<a href="https://Littlecowherd.github.io/tag/gZrgiIR3U-" class="tag">Debug</a>
-
-
-</span>
-
-
-    </div>
-
-  </div>
-
-
-
-
-
-  <div class="post_content markdown"><p class="md_block">
-    <span class="md_line md_line_start md_line_end"><h2 id="发现问题">发现问题</h2>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title"> 记一次Scrapy进程卡死的Debug过程</h2>
+            <div class="post-date">2019-07-30</div>
+            
+            <div class="post-content">
+              <h2 id="发现问题">发现问题</h2>
 <p>日常巡查数据入库情况时，发现最新数据的入库时间停在了凌晨。立刻登录远程服务器，尝试定位问题。</p>
 <ol>
 <li>
@@ -198,7 +119,7 @@
 <pre><code>ps -ef | grep xxxappspider
 </code></pre>
 <p>输出信息如下</p>
-<p><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt=""></figure>
 <p>可以看到进程在凌晨 01:40 成功启动了，但是一直没有执行完成，推测是代码出现了死锁等问题？查看日志也没有记录到有用的信息。</p>
 </li>
 <li>
@@ -248,7 +169,7 @@ ps -ef |grep python |grep ***
 py-spy --pid 32179
 </code></pre>
 <p>输出信息如下：</p>
-<p><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt=""></figure>
 <p>可以看到，程序是卡在了建立网络连接的部分。<code>hand_request</code>是一个为某个App请求签名的函数，被单独放在了<code>utils</code>这个目录下。接下来就简单了，找到这个函数，在第43行，发现了一个 post 请求。嗯，其实不管是 post 还是 get 都不要紧，重要的是这个请求没有加 <code>timeout</code> 参数！！！</p>
 <p><strong>Requests 文档里写的很清楚了，如果没有超时参数，程序有可能永远失去响应。</strong></p>
 <blockquote>
@@ -274,155 +195,92 @@ requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Req
 <li><a href="https://pythonhunter.org/episodes/2">Ep 02. 开发中的碎碎念 ——《捕蛇者说》</a></li>
 <li><a href="https://2.python-requests.org//zh_CN/latest/user/quickstart.html#id10">超时 ——Requests 官方文档</a></li>
 </ol>
-</p>
 
-     <p class="md_block">
-    <div class="reward"><div class="reward-button">赏 <span class="reward-code"> <span class="alipay-code"> <img class="alipay-img" src="https://Littlecowherd.github.io/media/images/alipay.png"><b>支付宝扫码打赏</b> </span> <span class="wechat-code"> <img class="wechat-img" src="https://Littlecowherd.github.io/media/images/wechat.png"><b>微信打赏</b> </span> </span></div></div>
-</p> 
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://Littlecowherd.github.io/tag/0N8PjAb__" class="tag">
+                    Scrapy
+                  </a>
+                
+                  <a href="https://Littlecowherd.github.io/tag/YY-86xwMCe" class="tag">
+                    Python
+                  </a>
+                
+                  <a href="https://Littlecowherd.github.io/tag/gZrgiIR3U-" class="tag">
+                    Debug
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Littlecowherd.github.io/post/chao-xiang-xi-cloudcone-shi-yong-zhi-nan">
+                  <h3 class="post-title">
+                    超详细CloudCone使用指南
+                  </h3>
+                </a>
+              </div>
+            
 
-</div>
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
 
+              
+            
 
+          </div>
 
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
+        </div>
+      </div>
+    </div>
 
-<div class="doc_comments">
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-          
-            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="application/javascript">
 
-<div id="gitalk-container"></div>
+AOS.init();
 
-<script>
+hljs.initHighlightingOnLoad()
 
-  var gitalk = new Gitalk({
-    clientID: 'b836cf6282c628b1d408',
-    clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
-    repo: 'Littlecowherd.github.io',
-    owner: 'Littlecowherd',
-    admin: ['Littlecowherd'],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-
-  gitalk.render('gitalk-container')
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
 </script>
 
-          
-			  
-          
-        
-</div>
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'b836cf6282c628b1d408',
+        clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
+        repo: 'Littlecowherd.github.io',
+        owner: 'Littlecowherd',
+        admin: ['Littlecowherd'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
-  </div>
-</div>
 
-
-
-      </div>
-
-
-
-
-    </div>
-
-   <div class="footer">
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/><div class="site_footer_wrap"><div class="site_footer">
-
-      <div class="mysocials"><div class="my_socials">
-		   
-			   
-    
-			   
-    
-			   
-    
-			   
-    
-</div><link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
-
-      </div>
-
-      <div class="copyright">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-      </div>
-
-</div></div>
-
-    </div>
-
-
-<style type="text/css">a.back_to_top {
-    text-decoration: none;
-    position: fixed;
-    bottom: 40px;
-    right: 30px;
-    background: #f0f0f0;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    line-height: 36px;
-    font-size: 18px;
-    text-align: center;
-    transition-duration: .5s;
-    transition-propety: background-color;
-    display: none;
-}
-
-a.back_to_top span {
-    color: #888;
-}
-
-a.back_to_top:hover {
-    cursor: pointer;
-    background: #dfdfdf;
-}
-
-a.back_to_top:hover span {
-    color: #555;
-}
-
-@media print, screen and (max-width: 580px) {
-    .back_to_top {
-        display: none !important;
-    }
-}
-
-
-
-</style><a id="back_to_top" href="#" class="back_to_top"><span>△</span>
-</a>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/jquery.js"></script>
-
-<script>$(document).ready((function(_this) {
-  return function() {
-    var bt;
-    bt = $('#back_to_top');
-    if ($(document).width() > 480) {
-      $(window).scroll(function() {
-        var st;
-        st = $(window).scrollTop();
-        if (st > 30) {
-          return bt.css('display', 'block');
-        } else {
-          return bt.css('display', 'none');
-        }
-      });
-      return bt.click(function() {
-        $('body,html').animate({
-          scrollTop: 0
-        }, 800);
-        return false;
-      });
-    }
-  };
-})(this));
-</script>
-
-</body>
-
+  </body>
 </html>

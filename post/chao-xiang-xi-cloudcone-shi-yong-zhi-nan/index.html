@@ -1,382 +1,227 @@
-
+<!DOCTYPE html>
 <html>
-  <head lang="zh">
-        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-        <meta content="yes" name="apple-mobile-web-app-capable"/>
-        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-        <meta content="telephone=no" name="format-detection"/>
-        <meta name="renderer" content="webkit">
-    <title>超详细CloudCone使用指南 | 小酒馆</title>
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/jquery.js"></script>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/basic.js"></script>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
+  <head>
+    <meta charset="utf-8" >
+
+<title>超详细CloudCone使用指南 | 小酒馆</title>
+<meta name="description" content="从前有个人的小酒馆">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1569571195300">
+<link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
 
   </head>
-
   <body>
-     <div class="header">
-      <div class="logo_title">
-		  
-        <div class="title animated fadeInDown"><img src="https://Littlecowherd.github.io/images/avatar.png?v=1566539833306"/>
+    <div id="app" class="main">
 
-          <h1 title="小酒馆" class="weaklink"><a href="/">小酒馆</a>
-
-          </h1>
-
-          <div class="navbar weaklink">
-            <div class="normal_nav">
-
-<div class="bitcron_nav_container">
-
-
-  <div class="bitcron_nav">
-    <div class="mixed_site_nav_wrap site_nav_wrap">
-		
-      <ul class="mixed_site_nav site_nav sm sm-base">
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://Littlecowherd.github.io" class="selected active current nav__item" >首页</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/archives" class="selected active current nav__item" >归档</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/tags" class="selected active current nav__item" >标签</a>
-
-  </li>
- 
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/post/about" class="selected active current nav__item" >关于</a>
-
-  </li>
- 
-
-      </ul>
-
-      <div class="clear clear_nav_inline_end"></div>
-
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Littlecowherd.github.io">
+        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1569571195300" class="site-logo">
+        <h1 class="site-title">小酒馆</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-
+    <div>
+      
+        
+          <a href="https://Littlecowherd.github.io" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
   </div>
-
-
-
-  <div class="clear clear_nav_end"></div>
-
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Littlecowherd" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      从前有个人的小酒馆
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+  </div>
 </div>
 
-            </div>
 
-            <div class="hamberger"><i class="fa fa-bars"></i>
-<i class="fa fa-times"></i>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="hidden_nav animated fadeInDown">
-
-<div class="bitcron_nav_container">
-
-
-  <div class="bitcron_nav">
-    <div class="mixed_site_nav_wrap site_nav_wrap">
-      <ul class="mixed_site_nav site_nav sm sm-base">
-		  
-	
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://Littlecowherd.github.io" class="selected active current nav__item" >首页</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/archives" class="selected active current nav__item" >归档</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/tags" class="selected active current nav__item" >标签</a>
-
-  </li>
-
-
-  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/post/about" class="selected active current nav__item" >关于</a>
-
-  </li>
-
-
-
-
-
-      </ul>
-
-      <div class="clear clear_nav_inline_end"></div>
-
-    </div>
-
-  </div>
-
-
-
-  <div class="clear clear_nav_end"></div>
-
-</div>
-
-      </div>
-
-    </div>
-
-
-    <div class="main">
-      <div class="main-inner">
-
-
-<div class="content">
-
-
-
-
-
-
-  <div class="post_page" >
-
-<div class="post">
-  <div class="post_title sm_margin">
-    <h2><a>超详细CloudCone使用指南</a>
-
-
-
-    </h2>
-  </div>
-
-  <div class="post_details">
-    <div class="info"><i class="fa fa-clock-o"></i>
-<span class="date_info">2019-04-18</span>
-<i class="fa fa-eye"></i>
-
-<span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
-
-
-<i class="fa fa-bookmark-o"></i>
-<span class="tags_info weaklink">
-	
-	<a href="https://Littlecowherd.github.io/tag/niw___fkq" class="tag">VPS</a>
-
-
-</span>
-
-
-    </div>
-
-  </div>
-
-
-
-
-
-  <div class="post_content markdown"><p class="md_block">
-    <span class="md_line md_line_start md_line_end"><h2 id="起因">起因</h2>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">超详细CloudCone使用指南</h2>
+            <div class="post-date">2019-04-18</div>
+            
+            <div class="post-content">
+              <h2 id="起因">起因</h2>
 <p>相较于其他 VPS 提供商（ <a href="https://www.vultr.com/?ref=7468133">Vultr</a> 、<a href="https://m.do.co/c/b4f1eed9d029">DigitalOcean</a>、<a href="https://www.linode.com/">Linode</a> 等等），CloudCone 比较新，知名度比较低。得益于这一点，这家服务商的 IP 段在学校还能正常访问，这也是我选择它的最根本原因。</p>
 <h2 id="开始试用">开始试用</h2>
 <h3 id="1-注册账号">1. 注册账号</h3>
 <p>你可以点击 <a href="https://app.cloudcone.com/?ref=486">CloudCone</a> 来登录或者注册，如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220133730.png" alt=""></p>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220133730.png" alt=""></figure>
 <p>如果已有账号 ，输入账号密码点击 Log in 即可登录。如果没有账号请点击 Sign up 跳转到注册界面，如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220134049.png" alt=""></p>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220134049.png" alt=""></figure>
 <p>按照图中标识填写注册完成，点击 Create My Account 即可创建账号。</p>
 <p><em>注：How did you hear about us？ 这个问题可以不填写。</em></p>
 <h3 id="2-充值">2. 充值</h3>
 <p>注册成功，登录账号会看到如下一个界面。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194449.png" alt=""></p>
+<figure data-type="image" tabindex="3"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194449.png" alt=""></figure>
 <p>因为我已经有一台云服务器了，你看到的界面可能和我的有些不一样，但是没啥关系。</p>
 <p>点击右上角的加号，选择 billing，进入充值页面，如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194745.png" alt=""></p>
+<figure data-type="image" tabindex="4"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194745.png" alt=""></figure>
 <p>进入充值页面后选择 Add funds</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194958.png" alt=""></p>
+<figure data-type="image" tabindex="5"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194958.png" alt=""></figure>
 <p>可以看到支持的充值方式为有 PayPal 和 Alipay（支付宝）等方式</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220195104.png" alt=""></p>
+<figure data-type="image" tabindex="6"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220195104.png" alt=""></figure>
 <p>说一下这两种支付方式的区别：PayPal 可以自定义充值金额，最低充值金额是 $1，但是不够方便，可能还得注册账号绑定银行卡；支付宝要方便的多，但是最低充值金额是 $5，30 多块人民币。具体怎么选看你的喜好。</p>
 <p>值得一提的是，这个页面的最下面有个 Promotional Codes，如果有优惠码的话，可以填写在这里，如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220204412.png" alt=""></p>
+<figure data-type="image" tabindex="7"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220204412.png" alt=""></figure>
 <p>关于这个优惠码，我问了客服，优惠码没拿到，他倒是给了我一个促销链接。请点击<a href="https://cloudcone.com/offers">这里</a>查看 。此外这家服务商偶尔还会发送一些促销邮件，有一些价格很低的套餐值得一试。</p>
 <h3 id="3-选购服务器">3. 选购服务器</h3>
 <p>再次点击右上角的加号，选择 Cloud Server ，进入配置选择界面，如下图。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222241.png" alt=""></p>
+<figure data-type="image" tabindex="8"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222241.png" alt=""></figure>
 <p>新用户有首月 $1.99 的优惠，我这里已经变回正常价格了。</p>
 <p>可供选择的镜像类型如下图</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222459.png" alt=""></p>
+<figure data-type="image" tabindex="9"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222459.png" alt=""></figure>
 <p><em>这里说明一点， 列表最下放的 CentOS 7.5 是开启了BBR加速的，访问速度可能会好一点。当然，也可以选择默认不开启BBR的服务器，然后自己手动启动BBR加速，也不会很麻烦。</em></p>
 <p>根据自己的需要选择配置，如果只是用来搭梯子的话，统统选择最低配置就完全够用了。 再有一点，hostname项，如果有自己的域名的话可以填写，也可以随便起个名字（Test、Tom、Jerry……）。选择完之后，点击 Deploy Server 生成服务器。</p>
 <h3 id="4-查看服务器">4. 查看服务器</h3>
 <p>点击最上方导航栏的 Cumpute，就可以看到你刚刚选购完的服务器了，点击 Manage 进入管理页面。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311173956.png" alt=""></p>
+<figure data-type="image" tabindex="10"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311173956.png" alt=""></figure>
 <p>通过管理界面，你可以查看 VPS 实例的资源使用情况，或者进行开关机、重启、连接终端、更换操作系统、销毁vps等一系列操作。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311170422.png" alt="实例详细信息"></p>
+<figure data-type="image" tabindex="11"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311170422.png" alt="实例详细信息"></figure>
 <p>如果你想看更详细的资源使用信息（CPU 利用率、内存用量、网速、硬盘用量、平均负载），需要点击上图中的红框，获取安装 stats colelctor 插件的命令，完成安装后即可查看详细资源信息。</p>
 <p><em>P.S.  3 TB = 3072 GB，我从来没用完过……</em></p>
 <h3 id="5-连接并管理服务器">5. 连接并管理服务器</h3>
 <p>推荐使用 Xshell、Mobaxterm、Putty 等 SSH 工具管理你的 VPS。</p>
 <p>在你完成购买后，CloudCone 会将该实例的 IP 地址、用户名和密码发送到你的注册邮箱，如果你没收到的话，注意查看下垃圾箱。实在不行的话，可以通过 Access → Reset root password 重新获取，如下图。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311171918.png" alt="重置密码"></p>
+<figure data-type="image" tabindex="12"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311171918.png" alt="重置密码"></figure>
 <p>使用 SSH 连接到服务器，然后部署小飞机之类的，基本配置并不复杂，这里就不展开讲了。（具体步骤可以去看小飞机的文档：<a href="https://github.com/shadowsocks/shadowsocks/wiki/Shadowsocks-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">地址</a>）</p>
 <h3 id="6-科学上网测试">6. 科学上网测试</h3>
 <p>测试环境：200M带宽<br>
 效果如下图，有兴趣的朋友可以上手试试。</p>
-<p><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311172855.png" alt="Youtobe"></p>
-</p>
+<figure data-type="image" tabindex="13"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311172855.png" alt="Youtobe"></figure>
 
-     <p class="md_block">
-    <div class="reward"><div class="reward-button">赏 <span class="reward-code"> <span class="alipay-code"> <img class="alipay-img" src="https://Littlecowherd.github.io/media/images/alipay.png"><b>支付宝扫码打赏</b> </span> <span class="wechat-code"> <img class="wechat-img" src="https://Littlecowherd.github.io/media/images/wechat.png"><b>微信打赏</b> </span> </span></div></div>
-</p> 
-</div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://Littlecowherd.github.io/tag/niw___fkq" class="tag">
+                    VPS
+                  </a>
+                
+              </div>
+            
+            
 
-</div>
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
 
+              
+            
 
+          </div>
 
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
+        </div>
+      </div>
+    </div>
 
-<div class="doc_comments">
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-          
-            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="application/javascript">
 
-<div id="gitalk-container"></div>
+AOS.init();
 
-<script>
+hljs.initHighlightingOnLoad()
 
-  var gitalk = new Gitalk({
-    clientID: 'b836cf6282c628b1d408',
-    clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
-    repo: 'Littlecowherd.github.io',
-    owner: 'Littlecowherd',
-    admin: ['Littlecowherd'],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-
-  gitalk.render('gitalk-container')
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
 </script>
 
-          
-			  
-          
-        
-</div>
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'b836cf6282c628b1d408',
+        clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
+        repo: 'Littlecowherd.github.io',
+        owner: 'Littlecowherd',
+        admin: ['Littlecowherd'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
-  </div>
-</div>
 
-
-
-      </div>
-
-
-
-
-    </div>
-
-   <div class="footer">
-<link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/><div class="site_footer_wrap"><div class="site_footer">
-
-      <div class="mysocials"><div class="my_socials">
-		   
-			   
-    
-			   
-    
-			   
-    
-			   
-    
-</div><link href="https://Littlecowherd.github.io/styles/main.css" type="text/css" rel="stylesheet"/>
-
-      </div>
-
-      <div class="copyright">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-      </div>
-
-</div></div>
-
-    </div>
-
-
-<style type="text/css">a.back_to_top {
-    text-decoration: none;
-    position: fixed;
-    bottom: 40px;
-    right: 30px;
-    background: #f0f0f0;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    line-height: 36px;
-    font-size: 18px;
-    text-align: center;
-    transition-duration: .5s;
-    transition-propety: background-color;
-    display: none;
-}
-
-a.back_to_top span {
-    color: #888;
-}
-
-a.back_to_top:hover {
-    cursor: pointer;
-    background: #dfdfdf;
-}
-
-a.back_to_top:hover span {
-    color: #555;
-}
-
-@media print, screen and (max-width: 580px) {
-    .back_to_top {
-        display: none !important;
-    }
-}
-
-
-
-</style><a id="back_to_top" href="#" class="back_to_top"><span>△</span>
-</a>
-<script type="text/javascript" src="https://Littlecowherd.github.io/media/scripts/jquery.js"></script>
-
-<script>$(document).ready((function(_this) {
-  return function() {
-    var bt;
-    bt = $('#back_to_top');
-    if ($(document).width() > 480) {
-      $(window).scroll(function() {
-        var st;
-        st = $(window).scrollTop();
-        if (st > 30) {
-          return bt.css('display', 'block');
-        } else {
-          return bt.css('display', 'none');
-        }
-      });
-      return bt.click(function() {
-        $('body,html').animate({
-          scrollTop: 0
-        }, 800);
-        return false;
-      });
-    }
-  };
-})(this));
-</script>
-
-</body>
-
+  </body>
 </html>
