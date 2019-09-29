@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title> py-spy常见问题及使用说明 | 小酒馆</title>
+<title>Supervisor 简单使用 | 小酒馆</title>
 <meta name="description" content="从前有个人的小酒馆">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -101,62 +101,106 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title"> py-spy常见问题及使用说明</h2>
-            <div class="post-date">2019-08-01</div>
+            <h2 class="post-title">Supervisor 简单使用</h2>
+            <div class="post-date">2019-09-29</div>
             
             <div class="post-content">
-              <h2 id="常见问题">常见问题</h2>
-<h3 id="failed-to-suspend-process">Failed to suspend process</h3>
-<p>上篇文章说到了通过 py-spy 来分析Python进程，进而找到程序中的问题。有小伙伴在使用的时候遇到了这样的错误：</p>
-<pre><code class="language-bash">[test@localhost]# py-spy --pid 15235
-Error: Failed to suspend process
-Reason: EPERM: Operation not permitted
-</code></pre>
-<p>先看下报错信息：暂停进程失败，原因是操作不允许。</p>
-<p>百度\Google 一下，相关结果只有两条，并不能解决问题。</p>
-<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564652166145.png" alt=""></figure>
-<p>这个时候别慌，去看<a href="https://github.com/benfred/py-spy">官方文档</a>，虽然是英文写的，但是读起来并不会特别困难，实在不行就用翻译插件。</p>
-<p>果然找到了一条相关的，在命令中加入 <code>--nonblocking</code>参数就可以避免暂停 Python 进程。</p>
+              <h2 id="1-简介">1. 简介</h2>
 <blockquote>
-<h3 id="how-can-you-avoid-pausing-the-python-program">How can you avoid pausing the Python program?</h3>
-<p>By setting the <code>--nonblocking</code> option, py-spy won't pause the target python you are profiling from. While the performance impact of sampling from a process with py-spy is usually extremely low, setting this option will totally avoid interrupting your running python program.</p>
+<p>Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems.</p>
 </blockquote>
-<p>尝试一下，果然可以了。</p>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190731104040.png" alt=""></figure>
-<p>官方文档中还有在 Docker、Kubernetes 环境下运行的特殊说明、OS X 环境下的特殊问题等，可能暂时用不到，但是一定要了解。等到用的时候知道有这么回事，知道去哪里找解决方法。</p>
-<p><mark>我只是把我遇到的问题写了出来，如果你遇到了其他问题，强烈建议你去读一下官方文档。</mark></p>
-<h2 id="常用命令">常用命令</h2>
-<p><strong>监控 Python 进程</strong></p>
-<pre><code class="language-bash">py-spy --pid 12345
-# OR
-py-spy -- python myprogram.py
-</code></pre>
-<p><em>注意，如果直接通过 pid 参数来运行 py-spy 需要用到 root 权限。第二种启动方法会将 Python 进程以 py-spy子进程的形式启动，故而不需要 root 权限</em></p>
-<p><strong>绘制火焰图</strong></p>
-<pre><code class="language-bash">py-spy --flame profile.svg --pid 12345
-# OR
-py-spy --flame profile.svg -- python myprogram.py
-</code></pre>
-<p><em>注意，图片的类型一定得是 svg</em></p>
-<h2 id="小结">小结</h2>
-<p>遇到问题，可能很多人的第一反应都是去求助搜索引擎，这种方法对应某些情况来说的确很好用（比如说，这个工具用的人很多，有很多人都遇到过类似的问题）。但像这次，相关的结果很少，那一定要去看看官方文档，如果官方文档任然不能解决你的问题，还可以去提 issue（一定要把问题说清楚，啥环境、什么问题，以及你的目的等等）。阅读源码当然也是一个途径。</p>
-<p>官方文档，永远是帮我们了解某个工具的最好途径之一，甚至可以去掉之一。</p>
-<h2 id="参考信息">参考信息</h2>
+<p>Supervisor是一个客户端/服务器系统，能够帮助用户监控和管理运行在类 UNIX 系统上的进程。</p>
+<h2 id="2-安装">2. 安装</h2>
+<p><strong>两种安装方式</strong></p>
 <ol>
-<li><a href="https://github.com/benfred/py-spy">py-spy 官方文档</a></li>
-<li><a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md">提问的智慧</a></li>
+<li>
+<p>通过 pip 安装（推荐）</p>
+<pre><code class="language-bash">pip install supervisor
+</code></pre>
+</li>
+<li>
+<p>通过发行包直接安装</p>
+<pre><code class="language-bash"># ubuntu Debian
+apt install supervisor
+# Centos Redhat 
+yum install supervisor
+</code></pre>
+</li>
+</ol>
+<h2 id="3-使用">3. 使用</h2>
+<ol>
+<li>
+<p>生成默认配置</p>
+<pre><code class="language-bash">echo_supervisord_conf &gt; /etc/supervisord.conf
+</code></pre>
+</li>
+<li>
+<p>修改默认配置</p>
+<pre><code class="language-bash">vim /etc/supervisord.conf
+</code></pre>
+<p><strong>跳到最后，修改以下几行：</strong>（千万不要忽视了<code>[include]</code>前面的分号！）</p>
+<pre><code class="language-ini">;[include]
+;files = /etc/supervisor/*.ini
+</code></pre>
+<p>去掉开头的 “ ; ”，使这两行生效。（<strong>一定注意，这两行都要取消注释！</strong>）</p>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929163952.png" alt=""></figure>
+<p>这两行的作用就是，将<code>/etc/supervisor/</code>目录下所有的<code>.ini</code>文件都包含到这个配置文件里来。</p>
+</li>
+<li>
+<p>编写自己的配置</p>
+<p>进入<code>/etc/supervisor/</code>目录，编写自己的配置文件</p>
+<pre><code>vim myCelery.ini
+</code></pre>
+<p>配置文件内容实例</p>
+<pre><code class="language-ini">[program:mp_celery]  # 这个是进程的名字，随意起
+command=/root/test/venv/bin/celery -B -A Platform worker -l info  # 要运行的命令
+directory=/root/mpPlatform/BoardCrawlerPlatform  # 运行命令的目录
+
+numprocs=1
+# 设置log的路径
+stdout_logfile=/var/log/supervisor/mp_celery.log
+stderr_logfile=/var/log/supervisor/mp_celery_error.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs = 10
+priority=15
+</code></pre>
+</li>
+<li>
+<p>启动 Supervisor</p>
+<pre><code class="language-bash"># supervisord -c /path/to/config
+supervisord -c /etc/supervisord.conf
+</code></pre>
+</li>
+<li>
+<p>查看执行状态</p>
+<pre><code>supervisorctl
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929164908.png" alt=""></figure>
+<p>如果输出结果如上图，就说明成功了。</p>
+<p>如果不是这样的，可以去<code>/var/log/supervisor</code>目录下查看日志，是不是有什么错误。</p>
+<p>常用命令</p>
+<pre><code class="language-bash">status       # 查看状态
+reread       # 读取配置信息
+update       # 加载最新的进程
+stop         # 停止进程
+start        # 启动进程
+reload       # 重新加载配置
+</code></pre>
+</li>
 </ol>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://Littlecowherd.github.io/tag/YY-86xwMCe" class="tag">
-                    Python
+                  <a href="https://Littlecowherd.github.io/tag/jJahv-Kg4" class="tag">
+                    Supervisor
                   </a>
                 
-                  <a href="https://Littlecowherd.github.io/tag/gZrgiIR3U-" class="tag">
-                    Debug
+                  <a href="https://Littlecowherd.github.io/tag/YY-86xwMCe" class="tag">
+                    Python
                   </a>
                 
               </div>
@@ -164,9 +208,9 @@ py-spy --flame profile.svg -- python myprogram.py
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Littlecowherd.github.io/post/ji-yi-ci-scrapy-jin-cheng-qia-si-de-debug-guo-cheng">
+                <a href="https://Littlecowherd.github.io/post/JdmtOALbL">
                   <h3 class="post-title">
-                     记一次Scrapy进程卡死的Debug过程
+                     关于Requests代理，你必须知道的
                   </h3>
                 </a>
               </div>

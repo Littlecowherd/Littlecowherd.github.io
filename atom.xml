@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>小酒馆</title>
-    <updated>2019-09-27T08:03:10.977Z</updated>
+    <updated>2019-09-29T08:56:20.541Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -10,6 +10,99 @@
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, 小酒馆</rights>
+    <entry>
+        <title type="html"><![CDATA[Supervisor 简单使用]]></title>
+        <id>https://Littlecowherd.github.io/post/03ovubxPi</id>
+        <link href="https://Littlecowherd.github.io/post/03ovubxPi">
+        </link>
+        <updated>2019-09-29T08:55:05.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="1-简介">1. 简介</h2>
+<blockquote>
+<p>Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems.</p>
+</blockquote>
+<p>Supervisor是一个客户端/服务器系统，能够帮助用户监控和管理运行在类 UNIX 系统上的进程。</p>
+<h2 id="2-安装">2. 安装</h2>
+<p><strong>两种安装方式</strong></p>
+<ol>
+<li>
+<p>通过 pip 安装（推荐）</p>
+<pre><code class="language-bash">pip install supervisor
+</code></pre>
+</li>
+<li>
+<p>通过发行包直接安装</p>
+<pre><code class="language-bash"># ubuntu Debian
+apt install supervisor
+# Centos Redhat 
+yum install supervisor
+</code></pre>
+</li>
+</ol>
+<h2 id="3-使用">3. 使用</h2>
+<ol>
+<li>
+<p>生成默认配置</p>
+<pre><code class="language-bash">echo_supervisord_conf &gt; /etc/supervisord.conf
+</code></pre>
+</li>
+<li>
+<p>修改默认配置</p>
+<pre><code class="language-bash">vim /etc/supervisord.conf
+</code></pre>
+<p><strong>跳到最后，修改以下几行：</strong>（千万不要忽视了<code>[include]</code>前面的分号！）</p>
+<pre><code class="language-ini">;[include]
+;files = /etc/supervisor/*.ini
+</code></pre>
+<p>去掉开头的 “ ; ”，使这两行生效。（<strong>一定注意，这两行都要取消注释！</strong>）</p>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929163952.png" alt=""></figure>
+<p>这两行的作用就是，将<code>/etc/supervisor/</code>目录下所有的<code>.ini</code>文件都包含到这个配置文件里来。</p>
+</li>
+<li>
+<p>编写自己的配置</p>
+<p>进入<code>/etc/supervisor/</code>目录，编写自己的配置文件</p>
+<pre><code>vim myCelery.ini
+</code></pre>
+<p>配置文件内容实例</p>
+<pre><code class="language-ini">[program:mp_celery]  # 这个是进程的名字，随意起
+command=/root/test/venv/bin/celery -B -A Platform worker -l info  # 要运行的命令
+directory=/root/mpPlatform/BoardCrawlerPlatform  # 运行命令的目录
+
+numprocs=1
+# 设置log的路径
+stdout_logfile=/var/log/supervisor/mp_celery.log
+stderr_logfile=/var/log/supervisor/mp_celery_error.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs = 10
+priority=15
+</code></pre>
+</li>
+<li>
+<p>启动 Supervisor</p>
+<pre><code class="language-bash"># supervisord -c /path/to/config
+supervisord -c /etc/supervisord.conf
+</code></pre>
+</li>
+<li>
+<p>查看执行状态</p>
+<pre><code>supervisorctl
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929164908.png" alt=""></figure>
+<p>如果输出结果如上图，就说明成功了。</p>
+<p>如果不是这样的，可以去<code>/var/log/supervisor</code>目录下查看日志，是不是有什么错误。</p>
+<p>常用命令</p>
+<pre><code class="language-bash">status       # 查看状态
+reread       # 读取配置信息
+update       # 加载最新的进程
+stop         # 停止进程
+start        # 启动进程
+reload       # 重新加载配置
+</code></pre>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ 关于Requests代理，你必须知道的]]></title>
         <id>https://Littlecowherd.github.io/post/JdmtOALbL</id>
