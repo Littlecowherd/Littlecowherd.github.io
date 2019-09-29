@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>小酒馆</title>
-    <updated>2019-09-29T08:56:20.541Z</updated>
+    <updated>2019-09-29T09:00:55.680Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -62,7 +62,7 @@ yum install supervisor
 <p>进入<code>/etc/supervisor/</code>目录，编写自己的配置文件</p>
 <pre><code>vim myCelery.ini
 </code></pre>
-<p>配置文件内容实例</p>
+<p>配置文件内容实例（如需了解配置文件的含义，请查看官方文档）</p>
 <pre><code class="language-ini">[program:mp_celery]  # 这个是进程的名字，随意起
 command=/root/test/venv/bin/celery -B -A Platform worker -l info  # 要运行的命令
 directory=/root/mpPlatform/BoardCrawlerPlatform  # 运行命令的目录
@@ -100,6 +100,11 @@ start        # 启动进程
 reload       # 重新加载配置
 </code></pre>
 </li>
+</ol>
+<h2 id="参考链接">参考链接</h2>
+<ol>
+<li><a href="http://supervisord.org/">Supervisor 官方文档</a></li>
+<li><a href="https://www.jianshu.com/p/222d85c3833e">使用supervisor后台运行celery</a></li>
 </ol>
 ]]></content>
     </entry>
