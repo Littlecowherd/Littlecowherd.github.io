@@ -1,101 +1,96 @@
-
-<!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>删除Git仓库的所有历史提交记录 | 有间小酒馆</title>
-<meta name="description" content="从前有个人的小酒馆">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1578368623327">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1578368570458">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://Littlecowherd.github.io">
-        <img class="avatar" src="https://Littlecowherd.github.io/images/avatar.png?v=1578368570458" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://Littlecowherd.github.io">
-        <h1 class="site-title">有间小酒馆</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Littlecowherd.github.io">
+  <img class="avatar" src="https://Littlecowherd.github.io/images/avatar.png?v=1578368623327" alt="">
+  </a>
+  <h1 class="site-title">
+    有间小酒馆
+  </h1>
+  <p class="site-description">
+    从前有个人的小酒馆
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="https://Littlecowherd.github.io" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Littlecowherd" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
   </div>
 </div>
 
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
       
-        
-          <a href="https://Littlecowherd.github.io" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-      <div class="content-container">
         <div class="post-detail">
-          
-          <h2 class="post-title">删除Git仓库的所有历史提交记录</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2019-08-08</span>
+          <article class="post">
+            <h2 class="post-title">
+              删除Git仓库的所有历史提交记录
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-08-08 ·
+              </time>
+              
+                <a href="https://Littlecowherd.github.io/tag/hpaf4p3Rl" class="post-tags">
+                  # git
+                </a>
+              
+            </div>
             
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="https://Littlecowherd.github.io/tag/hpaf4p3Rl">
-                    git
-                    
-                  </a>
-                
-              </span>
-            
-          </div>
-          <div class="post-content">
-            <p>在开发项目过程中，很可能在提交 git  时泄露了一些敏感信息，本地尚且无妨。倘若要同步到 GitHub 等公开平台，那就一定要消除这些信息。</p>
+            <div class="post-content">
+              <p>在开发项目过程中，很可能在提交 git  时泄露了一些敏感信息，本地尚且无妨。倘若要同步到 GitHub 等公开平台，那就一定要消除这些信息。</p>
 <p><strong>操作方式如下：</strong></p>
 <blockquote>
 <p>Deleting the <code>.git</code> folder may cause problems in your git repository. If you want to delete all your commit history but keep the code in its current state, it is very safe to do it as in the following:</p>
@@ -149,57 +144,32 @@
 </li>
 </ol>
 
-          </div>
+            </div>
+          </article>
         </div>
-
+    
         
           <div class="next-post">
-            <a class="purple-link" href="https://Littlecowherd.github.io/post/TICCX3MX-">
+            <div class="next">下一篇</div>
+            <a href="https://Littlecowherd.github.io/post/TICCX3MX-">
               <h3 class="post-title">
-                下一篇： py-spy常见问题及使用说明
+                 py-spy常见问题及使用说明
               </h3>
             </a>
-          </div>
-          
-      </div>
+          </div>  
+        
 
-      
-
-      <div class="site-footer">
-  <div class="slogan">从前有个人的小酒馆</div>
-  <div class="social-container">
+        
     
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
+        <div class="site-footer">
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
 </div>
 
-
-    </div>
-    <script type="application/javascript">
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+<script>
+  hljs.initHighlightingOnLoad()
 </script>
 
-
-
-
+      </div>
+    </div>
   </body>
 </html>
