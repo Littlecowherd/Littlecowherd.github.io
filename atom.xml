@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>有间小酒馆</title>
-    <updated>2019-11-07T09:56:10.439Z</updated>
+    <updated>2020-01-07T03:42:26.412Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
     <subtitle>从前有个人的小酒馆</subtitle>
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, 有间小酒馆</rights>
+    <rights>All rights reserved 2020, 有间小酒馆</rights>
     <entry>
         <title type="html"><![CDATA[Supervisor 简单使用]]></title>
         <id>https://Littlecowherd.github.io/post/03ovubxPi</id>
@@ -54,7 +54,7 @@ yum install supervisor
 ;files = /etc/supervisor/*.ini
 </code></pre>
 <p>去掉开头的 “ ; ”，使这两行生效。（<strong>一定注意，这两行都要取消注释！</strong>）</p>
-<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929163952.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929163952.png" alt="" loading="lazy"></figure>
 <p>这两行的作用就是，将<code>/etc/supervisor/</code>目录下所有的<code>.ini</code>文件都包含到这个配置文件里来。</p>
 </li>
 <li>
@@ -88,7 +88,7 @@ supervisord -c /etc/supervisord.conf
 <p>查看执行状态</p>
 <pre><code>supervisorctl
 </code></pre>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929164908.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929164908.png" alt="" loading="lazy"></figure>
 <p>如果输出结果如上图，就说明成功了。</p>
 <p>如果不是这样的，可以去<code>/var/log/supervisor</code>目录下查看日志，是不是有什么错误。</p>
 <p>常用命令</p>
@@ -116,7 +116,7 @@ reload       # 重新加载配置
         <updated>2019-08-21T02:55:55.000Z</updated>
         <content type="html"><![CDATA[<p>说到代理，写过爬虫的小伙伴一定都不陌生。但是<strong>你的代理真的生效了么</strong>？</p>
 <p>代理主要分为以下几类：</p>
-<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类"></figure>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类" loading="lazy"></figure>
 <p>如果是爬虫的话，最常见的选择是高匿代理。</p>
 <p>Requests 设置代理非常方便，只需传递一个 proxies 参数即可。如官方示例：</p>
 <pre><code class="language-Python">import requests
@@ -392,7 +392,7 @@ Reason: EPERM: Operation not permitted
 </code></pre>
 <p>先看下报错信息：暂停进程失败，原因是操作不允许。</p>
 <p>百度\Google 一下，相关结果只有两条，并不能解决问题。</p>
-<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564652166145.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564652166145.png" alt="" loading="lazy"></figure>
 <p>这个时候别慌，去看<a href="https://github.com/benfred/py-spy">官方文档</a>，虽然是英文写的，但是读起来并不会特别困难，实在不行就用翻译插件。</p>
 <p>果然找到了一条相关的，在命令中加入 <code>--nonblocking</code>参数就可以避免暂停 Python 进程。</p>
 <blockquote>
@@ -400,7 +400,7 @@ Reason: EPERM: Operation not permitted
 <p>By setting the <code>--nonblocking</code> option, py-spy won't pause the target python you are profiling from. While the performance impact of sampling from a process with py-spy is usually extremely low, setting this option will totally avoid interrupting your running python program.</p>
 </blockquote>
 <p>尝试一下，果然可以了。</p>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190731104040.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190731104040.png" alt="" loading="lazy"></figure>
 <p>官方文档中还有在 Docker、Kubernetes 环境下运行的特殊说明、OS X 环境下的特殊问题等，可能暂时用不到，但是一定要了解。等到用的时候知道有这么回事，知道去哪里找解决方法。</p>
 <p><mark>我只是把我遇到的问题写了出来，如果你遇到了其他问题，强烈建议你去读一下官方文档。</mark></p>
 <h2 id="常用命令">常用命令</h2>
@@ -446,7 +446,7 @@ py-spy --flame profile.svg -- python myprogram.py
 <pre><code>ps -ef | grep xxxappspider
 </code></pre>
 <p>输出信息如下</p>
-<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt="" loading="lazy"></figure>
 <p>可以看到进程在凌晨 01:40 成功启动了，但是一直没有执行完成，推测是代码出现了死锁等问题？查看日志也没有记录到有用的信息。</p>
 </li>
 <li>
@@ -496,7 +496,7 @@ ps -ef |grep python |grep ***
 py-spy --pid 32179
 </code></pre>
 <p>输出信息如下：</p>
-<figure data-type="image" tabindex="2"><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt="" loading="lazy"></figure>
 <p>可以看到，程序是卡在了建立网络连接的部分。<code>hand_request</code>是一个为某个App请求签名的函数，被单独放在了<code>utils</code>这个目录下。接下来就简单了，找到这个函数，在第43行，发现了一个 post 请求。嗯，其实不管是 post 还是 get 都不要紧，重要的是这个请求没有加 <code>timeout</code> 参数！！！</p>
 <p><strong>Requests 文档里写的很清楚了，如果没有超时参数，程序有可能永远失去响应。</strong></p>
 <blockquote>
@@ -535,49 +535,49 @@ requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Req
 <h2 id="开始试用">开始试用</h2>
 <h3 id="1-注册账号">1. 注册账号</h3>
 <p>你可以点击 <a href="https://app.cloudcone.com/?ref=486">CloudCone</a> 来登录或者注册，如下图所示。</p>
-<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220133730.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220133730.png" alt="" loading="lazy"></figure>
 <p>如果已有账号 ，输入账号密码点击 Log in 即可登录。如果没有账号请点击 Sign up 跳转到注册界面，如下图所示。</p>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220134049.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220134049.png" alt="" loading="lazy"></figure>
 <p>按照图中标识填写注册完成，点击 Create My Account 即可创建账号。</p>
 <p><em>注：How did you hear about us？ 这个问题可以不填写。</em></p>
 <h3 id="2-充值">2. 充值</h3>
 <p>注册成功，登录账号会看到如下一个界面。</p>
-<figure data-type="image" tabindex="3"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194449.png" alt=""></figure>
+<figure data-type="image" tabindex="3"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194449.png" alt="" loading="lazy"></figure>
 <p>因为我已经有一台云服务器了，你看到的界面可能和我的有些不一样，但是没啥关系。</p>
 <p>点击右上角的加号，选择 billing，进入充值页面，如下图所示。</p>
-<figure data-type="image" tabindex="4"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194745.png" alt=""></figure>
+<figure data-type="image" tabindex="4"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194745.png" alt="" loading="lazy"></figure>
 <p>进入充值页面后选择 Add funds</p>
-<figure data-type="image" tabindex="5"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194958.png" alt=""></figure>
+<figure data-type="image" tabindex="5"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220194958.png" alt="" loading="lazy"></figure>
 <p>可以看到支持的充值方式为有 PayPal 和 Alipay（支付宝）等方式</p>
-<figure data-type="image" tabindex="6"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220195104.png" alt=""></figure>
+<figure data-type="image" tabindex="6"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220195104.png" alt="" loading="lazy"></figure>
 <p>说一下这两种支付方式的区别：PayPal 可以自定义充值金额，最低充值金额是 $1，但是不够方便，可能还得注册账号绑定银行卡；支付宝要方便的多，但是最低充值金额是 $5，30 多块人民币。具体怎么选看你的喜好。</p>
 <p>值得一提的是，这个页面的最下面有个 Promotional Codes，如果有优惠码的话，可以填写在这里，如下图所示。</p>
-<figure data-type="image" tabindex="7"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220204412.png" alt=""></figure>
+<figure data-type="image" tabindex="7"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220204412.png" alt="" loading="lazy"></figure>
 <p>关于这个优惠码，我问了客服，优惠码没拿到，他倒是给了我一个促销链接。请点击<a href="https://cloudcone.com/offers">这里</a>查看 。此外这家服务商偶尔还会发送一些促销邮件，有一些价格很低的套餐值得一试。</p>
 <h3 id="3-选购服务器">3. 选购服务器</h3>
 <p>再次点击右上角的加号，选择 Cloud Server ，进入配置选择界面，如下图。</p>
-<figure data-type="image" tabindex="8"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222241.png" alt=""></figure>
+<figure data-type="image" tabindex="8"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222241.png" alt="" loading="lazy"></figure>
 <p>新用户有首月 $1.99 的优惠，我这里已经变回正常价格了。</p>
 <p>可供选择的镜像类型如下图</p>
-<figure data-type="image" tabindex="9"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222459.png" alt=""></figure>
+<figure data-type="image" tabindex="9"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/20181220222459.png" alt="" loading="lazy"></figure>
 <p><em>这里说明一点， 列表最下放的 CentOS 7.5 是开启了BBR加速的，访问速度可能会好一点。当然，也可以选择默认不开启BBR的服务器，然后自己手动启动BBR加速，也不会很麻烦。</em></p>
 <p>根据自己的需要选择配置，如果只是用来搭梯子的话，统统选择最低配置就完全够用了。 再有一点，hostname项，如果有自己的域名的话可以填写，也可以随便起个名字（Test、Tom、Jerry……）。选择完之后，点击 Deploy Server 生成服务器。</p>
 <h3 id="4-查看服务器">4. 查看服务器</h3>
 <p>点击最上方导航栏的 Cumpute，就可以看到你刚刚选购完的服务器了，点击 Manage 进入管理页面。</p>
-<figure data-type="image" tabindex="10"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311173956.png" alt=""></figure>
+<figure data-type="image" tabindex="10"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311173956.png" alt="" loading="lazy"></figure>
 <p>通过管理界面，你可以查看 VPS 实例的资源使用情况，或者进行开关机、重启、连接终端、更换操作系统、销毁vps等一系列操作。</p>
-<figure data-type="image" tabindex="11"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311170422.png" alt="实例详细信息"></figure>
+<figure data-type="image" tabindex="11"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311170422.png" alt="实例详细信息" loading="lazy"></figure>
 <p>如果你想看更详细的资源使用信息（CPU 利用率、内存用量、网速、硬盘用量、平均负载），需要点击上图中的红框，获取安装 stats colelctor 插件的命令，完成安装后即可查看详细资源信息。</p>
 <p><em>P.S.  3 TB = 3072 GB，我从来没用完过……</em></p>
 <h3 id="5-连接并管理服务器">5. 连接并管理服务器</h3>
 <p>推荐使用 Xshell、Mobaxterm、Putty 等 SSH 工具管理你的 VPS。</p>
 <p>在你完成购买后，CloudCone 会将该实例的 IP 地址、用户名和密码发送到你的注册邮箱，如果你没收到的话，注意查看下垃圾箱。实在不行的话，可以通过 Access → Reset root password 重新获取，如下图。</p>
-<figure data-type="image" tabindex="12"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311171918.png" alt="重置密码"></figure>
+<figure data-type="image" tabindex="12"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311171918.png" alt="重置密码" loading="lazy"></figure>
 <p>使用 SSH 连接到服务器，然后部署小飞机之类的，基本配置并不复杂，这里就不展开讲了。（具体步骤可以去看小飞机的文档：<a href="https://github.com/shadowsocks/shadowsocks/wiki/Shadowsocks-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">地址</a>）</p>
 <h3 id="6-科学上网测试">6. 科学上网测试</h3>
 <p>测试环境：200M带宽<br>
 效果如下图，有兴趣的朋友可以上手试试。</p>
-<figure data-type="image" tabindex="13"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311172855.png" alt="Youtobe"></figure>
+<figure data-type="image" tabindex="13"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown/cc20190311172855.png" alt="Youtobe" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>

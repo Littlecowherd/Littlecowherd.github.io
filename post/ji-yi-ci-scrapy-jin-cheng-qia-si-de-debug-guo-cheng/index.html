@@ -9,15 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1573120568891">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1578368417552">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
 
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -44,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Littlecowherd.github.io">
-        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1573120568891" class="site-logo">
+        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1578368417552" class="site-logo">
         <h1 class="site-title">有间小酒馆</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -128,7 +122,7 @@
 <pre><code>ps -ef | grep xxxappspider
 </code></pre>
 <p>输出信息如下</p>
-<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564469201050.png" alt="" loading="lazy"></figure>
 <p>可以看到进程在凌晨 01:40 成功启动了，但是一直没有执行完成，推测是代码出现了死锁等问题？查看日志也没有记录到有用的信息。</p>
 </li>
 <li>
@@ -178,7 +172,7 @@ ps -ef |grep python |grep ***
 py-spy --pid 32179
 </code></pre>
 <p>输出信息如下：</p>
-<figure data-type="image" tabindex="2"><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://Littlecowherd.github.io/post-images/1564469215602.png" alt="" loading="lazy"></figure>
 <p>可以看到，程序是卡在了建立网络连接的部分。<code>hand_request</code>是一个为某个App请求签名的函数，被单独放在了<code>utils</code>这个目录下。接下来就简单了，找到这个函数，在第43行，发现了一个 post 请求。嗯，其实不管是 post 还是 get 都不要紧，重要的是这个请求没有加 <code>timeout</code> 参数！！！</p>
 <p><strong>Requests 文档里写的很清楚了，如果没有超时参数，程序有可能永远失去响应。</strong></p>
 <blockquote>
@@ -235,12 +229,6 @@ requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Req
             
 
             
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
 
           </div>
 
@@ -264,29 +252,6 @@ var app = new Vue({
 })
 
 </script>
-
-
-  
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
-
-      var gitalk = new Gitalk({
-        clientID: 'b836cf6282c628b1d408',
-        clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
-        repo: 'Littlecowherd.github.io',
-        owner: 'Littlecowherd',
-        admin: ['Littlecowherd'],
-        id: location.pathname,      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
 
 
 

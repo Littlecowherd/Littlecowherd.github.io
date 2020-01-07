@@ -9,15 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1573120568891">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1578368417552">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
 
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -44,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Littlecowherd.github.io">
-        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1573120568891" class="site-logo">
+        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1578368417552" class="site-logo">
         <h1 class="site-title">有间小酒馆</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -123,7 +117,7 @@ Reason: EPERM: Operation not permitted
 </code></pre>
 <p>先看下报错信息：暂停进程失败，原因是操作不允许。</p>
 <p>百度\Google 一下，相关结果只有两条，并不能解决问题。</p>
-<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564652166145.png" alt=""></figure>
+<figure data-type="image" tabindex="1"><img src="https://Littlecowherd.github.io/post-images/1564652166145.png" alt="" loading="lazy"></figure>
 <p>这个时候别慌，去看<a href="https://github.com/benfred/py-spy">官方文档</a>，虽然是英文写的，但是读起来并不会特别困难，实在不行就用翻译插件。</p>
 <p>果然找到了一条相关的，在命令中加入 <code>--nonblocking</code>参数就可以避免暂停 Python 进程。</p>
 <blockquote>
@@ -131,7 +125,7 @@ Reason: EPERM: Operation not permitted
 <p>By setting the <code>--nonblocking</code> option, py-spy won't pause the target python you are profiling from. While the performance impact of sampling from a process with py-spy is usually extremely low, setting this option will totally avoid interrupting your running python program.</p>
 </blockquote>
 <p>尝试一下，果然可以了。</p>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190731104040.png" alt=""></figure>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190731104040.png" alt="" loading="lazy"></figure>
 <p>官方文档中还有在 Docker、Kubernetes 环境下运行的特殊说明、OS X 环境下的特殊问题等，可能暂时用不到，但是一定要了解。等到用的时候知道有这么回事，知道去哪里找解决方法。</p>
 <p><mark>我只是把我遇到的问题写了出来，如果你遇到了其他问题，强烈建议你去读一下官方文档。</mark></p>
 <h2 id="常用命令">常用命令</h2>
@@ -182,12 +176,6 @@ py-spy --flame profile.svg -- python myprogram.py
             
 
             
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
 
           </div>
 
@@ -211,29 +199,6 @@ var app = new Vue({
 })
 
 </script>
-
-
-  
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
-
-      var gitalk = new Gitalk({
-        clientID: 'b836cf6282c628b1d408',
-        clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
-        repo: 'Littlecowherd.github.io',
-        owner: 'Littlecowherd',
-        admin: ['Littlecowherd'],
-        id: location.pathname,      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
 
 
 

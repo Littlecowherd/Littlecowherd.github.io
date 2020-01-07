@@ -9,15 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1573120568891">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1578368417552">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
 
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -44,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Littlecowherd.github.io">
-        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1573120568891" class="site-logo">
+        <img src="https://Littlecowherd.github.io/images/avatar.png?v=1578368417552" class="site-logo">
         <h1 class="site-title">有间小酒馆</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -116,7 +110,7 @@
             <div class="post-content">
               <p>说到代理，写过爬虫的小伙伴一定都不陌生。但是<strong>你的代理真的生效了么</strong>？</p>
 <p>代理主要分为以下几类：</p>
-<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类"></figure>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190819105520.png" alt="代理分类" loading="lazy"></figure>
 <p>如果是爬虫的话，最常见的选择是高匿代理。</p>
 <p>Requests 设置代理非常方便，只需传递一个 proxies 参数即可。如官方示例：</p>
 <pre><code class="language-Python">import requests
@@ -349,12 +343,6 @@ proxies = {
             
 
             
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
 
           </div>
 
@@ -378,29 +366,6 @@ var app = new Vue({
 })
 
 </script>
-
-
-  
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
-
-      var gitalk = new Gitalk({
-        clientID: 'b836cf6282c628b1d408',
-        clientSecret: 'abb1ac589a24d4719f9bd4786f41a721f2764d19',
-        repo: 'Littlecowherd.github.io',
-        owner: 'Littlecowherd',
-        admin: ['Littlecowherd'],
-        id: location.pathname,      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
 
 
 
