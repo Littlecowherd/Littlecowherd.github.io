@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>删除Git仓库的所有历史提交记录 | 有间小酒馆</title>
+<title>初始 Hugo | 有间小酒馆</title>
 <link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1583746884856">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
@@ -87,72 +87,93 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    删除Git仓库的所有历史提交记录
+                    初始 Hugo
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2019-08-08 ·
+                        · 2020-03-09 ·
                     </time>
-                    
-                        <a href="https://Littlecowherd.github.io/tag/M03UfGD3Z/" class="post-tags">
-                            # Git
-                        </a>
                     
                 </div>
                 <div class="post-content">
-                    <p>在开发项目过程中，很可能在提交 git  时泄露了一些敏感信息，本地尚且无妨。倘若要同步到 GitHub 等公开平台，那就一定要消除这些信息。</p>
-<p><strong>操作方式如下：</strong></p>
-<blockquote>
-<p>Deleting the <code>.git</code> folder may cause problems in your git repository. If you want to delete all your commit history but keep the code in its current state, it is very safe to do it as in the following:</p>
-<p>删除 .git 文件夹可能会导致 git 存储库出现问题。如果要删除所有提交历史记录但保持代码处于当前状态，则执行此操作非常安全，如下所示：</p>
+                    <h2 id="安装及主题配置">安装及主题配置</h2>
 <ol>
 <li>
-<p>Checkout</p>
-<p><code>git checkout --orphan latest_branch</code></p>
+<p>推荐使用 scoop 安装 Hugo</p>
+<pre><code class="language-bash"># 普通版
+scoop install hugo
+# 扩展版
+scoop install hugo-extended
+</code></pre>
+<p>在后续使用过程中，如果出现以下报错，可以通过安装扩展版解决。 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<pre><code class="language-bash">error: failed to transform resource: TOCSS: failed to transform &quot;scss/main.scss&quot; (text/x-scss): this feature is not available in your current Hugo version
+</code></pre>
 </li>
 <li>
-<p>Add all the files</p>
-<p><code>git add -A</code></p>
+<p>生成站点</p>
+<p>​	<code>hugo new site path/to/your/blog</code></p>
 </li>
 <li>
-<p>Commit the changes</p>
-<p><code>git commit -am &quot;commit message&quot;</code></p>
+<p>安装主题 MemE <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<pre><code class="language-bash"># 安装
+cd blog
+git init
+git submodule add https://github.com/reuixiy/hugo-theme-meme.git themes/meme
+
+# 更新
+git submodule update --rebase --remote
+</code></pre>
 </li>
 <li>
-<p>Delete the branch</p>
-<p><code>git branch -D master</code></p>
-</li>
-<li>
-<p>Rename the current branch to master</p>
-<p><code>git branch -m master</code></p>
-</li>
-<li>
-<p>Finally, force update your repository</p>
-<p><code>git push -f origin master</code></p>
-</li>
-</ol>
-<p>PS: this will not keep your old commit history around</p>
-</blockquote>
-<p>这组命令对于发布开源分支来说很有帮助，新的分支含有之前的全部代码但不包含之前的提交记录，就算你不小心把敏感信息提交到了 GitHub，也可以用它来亡羊补牢。</p>
-<p><strong>命令说明</strong></p>
-<blockquote>
-<p><code>git checkout --orphan &lt;new_branch&gt;</code></p>
-<p>Create a new <em>orphan</em> branch, named &lt;new_branch&gt;, started from &lt;start_point&gt; and switch to it. The first commit made on this new branch will have no parents and it will be the root of a new history totally disconnected from all the other branches and commits.</p>
-<p>创建一个名为 &lt;new_branch&gt; 的新<em>孤立</em>分支，从 &lt;start_point&gt; 启动并切换到该分支。在这个新分支上进行的第一次提交将没有父项，它将成为与所有其他分支和提交完全断开的新历史的根。</p>
-</blockquote>
-<p>大致意思就是：创建一个名为  &lt;new_branch&gt;  的 全新的<em>孤立</em>分支，可以当成一个全新的根节点。</p>
-<p><strong>参考链接</strong></p>
+<p>配置主题</p>
 <ol>
 <li>
-<p><a href="https://stackoverflow.com/questions/13716658/how-to-delete-all-commit-history-in-github">how to delete all commit history in github? </a></p>
+<p>替换 config.toml</p>
+<p>打开站点文件夹，然后将 Hugo 默认生成的 <code>config.toml</code> 删除，再进入 <code>themes/meme/config-examples/zh-cn/</code> 目录，将 MemE 提供的 <code>config.toml</code> 复制到站点根目录下</p>
 </li>
 <li>
-<p><a href="https://www.jianshu.com/p/cad4d2ec4da5">Git checkout 用法总结</a></p>
+<p>新建文章</p>
+<pre><code class="language-sh">hugo new &quot;posts/hello-world.md&quot;
+hugo new &quot;about/_index.md&quot;
+</code></pre>
 </li>
 <li>
-<p><a href="https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---orphanltnewbranchgt">checkout - Git 官方文档</a></p>
+<p>体验测试</p>
+<pre><code class="language-sh">hugo server -D
+</code></pre>
 </li>
 </ol>
+</li>
+</ol>
+<h2 id="个性化">个性化</h2>
+<p>根据配置文件中的注释安装自己的需要配置即可，下面着重介绍下“品牌栏”的配置。</p>
+<ul>
+<li><a href="http://www.diyiziti.com/builder/90">这个网站</a>可以生成艺术字图片</li>
+<li><a href="https://www.aconvert.com/cn/image/png-to-svg/">这个网站</a>可以将图片转成 SVG 格式</li>
+<li><a href="https://jakearchibald.github.io/svgomg/">这个网站</a>可以压缩 SVG 文件</li>
+</ul>
+<p>这个流程走下来，brand 就做好了，接下来把它用到主题中。</p>
+<p>打开你的 SVG文件，给它添加一个名为 <code>brand</code> 的 <code>class</code>，比如：</p>
+<pre><code class="language-diff"># 修改前
+- &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+# 修改后
++ &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; class=&quot;brand&quot;&gt;
+</code></pre>
+<p>接下来，在站点的 <code>data</code> 文件夹内新建一个 <code>SVG.toml</code> 文件，并添加一行：</p>
+<pre><code class="language-toml">brand = ''
+</code></pre>
+<p>最后，将你的 SVG 粘贴进 <code>''</code> 内即可。</p>
+<h2 id="参考文档">参考文档</h2>
+<p><a href="https://io-oi.me/tech/documentation-of-hugo-theme-meme/">Hugo 主题 MemE 文档</a></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://gohugo.io/troubleshooting/faq/#i-get-tocss--this-feature-is-not-available-in-your-current-hugo-version <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://github.com/reuixiy/hugo-theme-meme/blob/master/README.zh-cn.md <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
                 </div>
             </article>
@@ -161,8 +182,8 @@
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://Littlecowherd.github.io/post/TICCX3MX-/" class="post-title gt-a-link">
-                    py-spy 常见问题及使用说明
+                <a href="https://Littlecowherd.github.io/post/03ovubxPi/" class="post-title gt-a-link">
+                    用 Supervisor 守护你的进程
                 </a>
             </div>
         

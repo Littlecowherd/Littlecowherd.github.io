@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>有间小酒馆</title>
-    <updated>2020-03-09T09:31:53.477Z</updated>
+    <updated>2020-03-09T09:42:09.484Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -10,6 +10,92 @@
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 有间小酒馆</rights>
+    <entry>
+        <title type="html"><![CDATA[初始 Hugo]]></title>
+        <id>https://Littlecowherd.github.io/post/R-OzPVSh7/</id>
+        <link href="https://Littlecowherd.github.io/post/R-OzPVSh7/">
+        </link>
+        <updated>2020-03-09T09:40:04.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="安装及主题配置">安装及主题配置</h2>
+<ol>
+<li>
+<p>推荐使用 scoop 安装 Hugo</p>
+<pre><code class="language-bash"># 普通版
+scoop install hugo
+# 扩展版
+scoop install hugo-extended
+</code></pre>
+<p>在后续使用过程中，如果出现以下报错，可以通过安装扩展版解决。 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<pre><code class="language-bash">error: failed to transform resource: TOCSS: failed to transform &quot;scss/main.scss&quot; (text/x-scss): this feature is not available in your current Hugo version
+</code></pre>
+</li>
+<li>
+<p>生成站点</p>
+<p>​	<code>hugo new site path/to/your/blog</code></p>
+</li>
+<li>
+<p>安装主题 MemE <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<pre><code class="language-bash"># 安装
+cd blog
+git init
+git submodule add https://github.com/reuixiy/hugo-theme-meme.git themes/meme
+
+# 更新
+git submodule update --rebase --remote
+</code></pre>
+</li>
+<li>
+<p>配置主题</p>
+<ol>
+<li>
+<p>替换 config.toml</p>
+<p>打开站点文件夹，然后将 Hugo 默认生成的 <code>config.toml</code> 删除，再进入 <code>themes/meme/config-examples/zh-cn/</code> 目录，将 MemE 提供的 <code>config.toml</code> 复制到站点根目录下</p>
+</li>
+<li>
+<p>新建文章</p>
+<pre><code class="language-sh">hugo new &quot;posts/hello-world.md&quot;
+hugo new &quot;about/_index.md&quot;
+</code></pre>
+</li>
+<li>
+<p>体验测试</p>
+<pre><code class="language-sh">hugo server -D
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="个性化">个性化</h2>
+<p>根据配置文件中的注释安装自己的需要配置即可，下面着重介绍下“品牌栏”的配置。</p>
+<ul>
+<li><a href="http://www.diyiziti.com/builder/90">这个网站</a>可以生成艺术字图片</li>
+<li><a href="https://www.aconvert.com/cn/image/png-to-svg/">这个网站</a>可以将图片转成 SVG 格式</li>
+<li><a href="https://jakearchibald.github.io/svgomg/">这个网站</a>可以压缩 SVG 文件</li>
+</ul>
+<p>这个流程走下来，brand 就做好了，接下来把它用到主题中。</p>
+<p>打开你的 SVG文件，给它添加一个名为 <code>brand</code> 的 <code>class</code>，比如：</p>
+<pre><code class="language-diff"># 修改前
+- &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+# 修改后
++ &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; class=&quot;brand&quot;&gt;
+</code></pre>
+<p>接下来，在站点的 <code>data</code> 文件夹内新建一个 <code>SVG.toml</code> 文件，并添加一行：</p>
+<pre><code class="language-toml">brand = ''
+</code></pre>
+<p>最后，将你的 SVG 粘贴进 <code>''</code> 内即可。</p>
+<h2 id="参考文档">参考文档</h2>
+<p><a href="https://io-oi.me/tech/documentation-of-hugo-theme-meme/">Hugo 主题 MemE 文档</a></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://gohugo.io/troubleshooting/faq/#i-get-tocss--this-feature-is-not-available-in-your-current-hugo-version <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://github.com/reuixiy/hugo-theme-meme/blob/master/README.zh-cn.md <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[用 Supervisor 守护你的进程]]></title>
         <id>https://Littlecowherd.github.io/post/03ovubxPi/</id>
