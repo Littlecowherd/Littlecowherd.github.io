@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>有间小酒馆</title>
-    <updated>2020-03-09T09:44:42.227Z</updated>
+    <updated>2020-08-04T06:50:10.898Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -319,9 +319,9 @@ validate(proxies)
 </code></pre>
 <p>请求<code>http://ip111.cn/</code>时，按照以下顺序在 proxies 字典中为这个链接选用代理：</p>
 <ol>
-<li>协议+域名 ：<code>http://222.189.244.56</code></li>
+<li>协议+域名 ：<code>http://ip111.cn</code></li>
 <li>协议：<code>http</code></li>
-<li>all + 域名：<code>all://222.189.244.56</code></li>
+<li>all + 域名：<code>all://ip111.cn</code></li>
 <li>all：<code>all</code></li>
 </ol>
 <p>在第 2 步匹配到<code>222.189.244.56:48304</code>，然后就使用这个代理去访问目标地址。</p>

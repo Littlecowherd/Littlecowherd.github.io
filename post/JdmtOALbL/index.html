@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title> 关于Requests代理，你必须知道的 | 有间小酒馆</title>
-<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1583747079092">
+<link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1596523805523">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Littlecowherd.github.io/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -231,9 +231,9 @@ validate(proxies)
 </code></pre>
 <p>请求<code>http://ip111.cn/</code>时，按照以下顺序在 proxies 字典中为这个链接选用代理：</p>
 <ol>
-<li>协议+域名 ：<code>http://222.189.244.56</code></li>
+<li>协议+域名 ：<code>http://ip111.cn</code></li>
 <li>协议：<code>http</code></li>
-<li>all + 域名：<code>all://222.189.244.56</code></li>
+<li>all + 域名：<code>all://ip111.cn</code></li>
 <li>all：<code>all</code></li>
 </ol>
 <p>在第 2 步匹配到<code>222.189.244.56:48304</code>，然后就使用这个代理去访问目标地址。</p>
