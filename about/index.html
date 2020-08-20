@@ -1,10 +1,10 @@
-<html>
+<html lang="zh">
 <head>
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<title>用 Supervisor 守护你的进程 | 有间小酒馆</title>
+<title>关于 - 有间小酒馆</title>
 
 <link rel="shortcut icon" href="https://Littlecowherd.github.io/favicon.ico?v=1597907522542">
 
@@ -25,7 +25,7 @@
 
 
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
@@ -94,135 +94,18 @@
 </nav>
 
     <div class="post-container">
-        <div class="post-detail gt-bg-theme-color-second">
+        <div class="post-detail">
             <article class="gt-post-content">
-                <h2 class="post-title">
-                    用 Supervisor 守护你的进程
-                </h2>
-                <div class="post-info">
-                    <time class="post-time gt-c-content-color-first">
-                        · 2019-09-29 ·
-                    </time>
-                    
-                        <a href="https://Littlecowherd.github.io/tag/jJahv-Kg4/" class="post-tags">
-                            # Supervisor
-                        </a>
-                    
-                        <a href="https://Littlecowherd.github.io/tag/YY-86xwMCe/" class="post-tags">
-                            # Python
-                        </a>
-                    
-                </div>
                 <div class="post-content">
-                    <h2 id="1-简介">1. 简介</h2>
-<blockquote>
-<p>Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems.</p>
-</blockquote>
-<p>Supervisor是一个客户端/服务器系统，能够帮助用户监控和管理运行在类 UNIX 系统上的进程。</p>
-<h2 id="2-安装">2. 安装</h2>
-<p><strong>两种安装方式</strong></p>
-<ol>
-<li>
-<p>通过 pip 安装（推荐）</p>
-<pre><code class="language-bash">pip install supervisor
-</code></pre>
-</li>
-<li>
-<p>通过发行包直接安装</p>
-<pre><code class="language-bash"># ubuntu Debian
-apt install supervisor
-# Centos Redhat 
-yum install supervisor
-</code></pre>
-</li>
-</ol>
-<h2 id="3-使用">3. 使用</h2>
-<ol>
-<li>
-<p>生成默认配置</p>
-<pre><code class="language-bash">echo_supervisord_conf &gt; /etc/supervisord.conf
-</code></pre>
-</li>
-<li>
-<p>修改默认配置</p>
-<pre><code class="language-bash">vim /etc/supervisord.conf
-</code></pre>
-<p><strong>跳到最后，修改以下几行：</strong>（千万不要忽视了<code>[include]</code>前面的分号！）</p>
-<pre><code class="language-ini">;[include]
-;files = /etc/supervisor/*.ini
-</code></pre>
-<p>去掉开头的 “ ; ”，使这两行生效。（<strong>一定注意，这两行都要取消注释！</strong>）</p>
-<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929163952.png" alt="" loading="lazy"></figure>
-<p>这两行的作用就是，将<code>/etc/supervisor/</code>目录下所有的<code>.ini</code>文件都包含到这个配置文件里来。</p>
-</li>
-<li>
-<p>编写自己的配置</p>
-<p>进入<code>/etc/supervisor/</code>目录，编写自己的配置文件</p>
-<pre><code>vim myCelery.ini
-</code></pre>
-<p>配置文件内容实例（如需了解配置文件的含义，请查看官方文档）</p>
-<pre><code class="language-ini">[program:mp_celery]  # 这个是进程的名字，随意起
-command=/root/test/venv/bin/celery -B -A Platform worker -l info  # 要运行的命令
-directory=/root/mpform/Platform  # 运行命令的目录
-
-numprocs=1
-# 设置log的路径
-stdout_logfile=/var/log/supervisor/mp_celery.log
-stderr_logfile=/var/log/supervisor/mp_celery_error.log
-autostart=true
-autorestart=true
-startsecs=10
-stopwaitsecs = 10
-priority=15
-</code></pre>
-</li>
-<li>
-<p>启动 Supervisor</p>
-<pre><code class="language-bash"># supervisord -c /path/to/config
-supervisord -c /etc/supervisord.conf
-</code></pre>
-</li>
-<li>
-<p>查看执行状态</p>
-<pre><code>supervisorctl
-</code></pre>
-<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20190929164908.png" alt="" loading="lazy"></figure>
-<p>如果输出结果如上图，就说明成功了。</p>
-<p>如果不是这样的，可以去<code>/var/log/supervisor</code>目录下查看日志，是不是有什么错误。</p>
-<p>常用命令</p>
-<pre><code class="language-bash">status       # 查看状态
-reread       # 读取配置信息
-update       # 加载最新的进程
-stop         # 停止进程
-start        # 启动进程
-reload       # 重新加载配置
-</code></pre>
-</li>
-</ol>
-<h2 id="参考链接">参考链接</h2>
-<ol>
-<li><a href="http://supervisord.org/">Supervisor 官方文档</a></li>
-<li><a href="https://www.jianshu.com/p/222d85c3833e">使用supervisor后台运行celery</a></li>
-</ol>
-
+                    
                 </div>
             </article>
         </div>
-
-        
-            <div class="next-post">
-                <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://Littlecowherd.github.io/post/JdmtOALbL/" class="post-title gt-a-link">
-                     关于Requests代理，你必须知道的
-                </a>
-            </div>
+        <br>
         
 
         
 
-        
-
-        
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first">从前有个人的小酒馆</div>

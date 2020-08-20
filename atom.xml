@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Littlecowherd.github.io</id>
     <title>有间小酒馆</title>
-    <updated>2020-08-04T06:50:10.898Z</updated>
+    <updated>2020-08-20T07:12:04.176Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Littlecowherd.github.io"/>
     <link rel="self" href="https://Littlecowherd.github.io/atom.xml"/>
@@ -10,6 +10,462 @@
     <logo>https://Littlecowherd.github.io/images/avatar.png</logo>
     <icon>https://Littlecowherd.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 有间小酒馆</rights>
+    <entry>
+        <title type="html"><![CDATA[Python 常见数据结构的底层实现]]></title>
+        <id>https://Littlecowherd.github.io/post/hQGohA5NG/</id>
+        <link href="https://Littlecowherd.github.io/post/hQGohA5NG/">
+        </link>
+        <updated>2020-08-20T06:46:48.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="字典的内部实现">字典的内部实现</h3>
+<p><code>PyDictObject</code>对象就是dict的内部实现，CPython 采用<strong>哈希表</strong>来实现 dict（与之不同的是，C++ 采用红黑树来实现 map）。</p>
+<h4 id="哈希表-hash-tables">哈希表 (HASH TABLES)</h4>
+<p>哈希表（也叫散列表），根据关键值对(Key-value)而直接进行访问的数据结构。它通过把key和value映射到表中一个位置来访问记录，这种查询速度非常快，更新也快。而这个映射函数叫做哈希函数，存放值的数组叫做哈希表。 哈希函数的实现方式决定了哈希表的搜索效率。具体操作过程是：</p>
+<ol>
+<li>数据添加：把key通过哈希函数转换成一个整型数字，然后就将该数字对数组长度进行取余，取余结果就当作数组的下标，将value存储在以该数字为下标的数组空间里。</li>
+<li>数据查询：再次使用哈希函数将key转换为对应的数组下标，并定位到数组的位置获取value。</li>
+</ol>
+<p>但是，对key进行hash的时候，不同的key可能hash出来的结果是一样的，尤其是数据量增多的时候，这个问题叫做哈希冲突。</p>
+<p>如果解决这种冲突情况呢？通常的做法有两种，一种是<strong>链地址法</strong>，另一种是<strong>开放寻址法</strong>，Python选择后者。因为<strong>链地址法会带来分配链表的开销</strong>，而 CPython 中 dict 又运用得极其普遍，因此 dict 采用开放寻址法来实现哈希表</p>
+<h4 id="开放寻址法open-addressing">开放寻址法（OPEN ADDRESSING）</h4>
+<p>开放寻址法中，所有的元素都存放在散列表里，当产生哈希冲突时，通过一个探测函数计算出下一个候选位置，如果下一个候选位置还是有冲突，那么不断通过探测函数往下找，直到找个一个空槽来存放待插入元素。</p>
+<p>值得注意的是，当哈希函数选择不当时，哈希值可能堆积在一起从而产生一次聚集或二次聚集的现象。这会使落在这个聚集区间内的哈希值总要探查多次才能找到正确的位置，从而极大的降低哈希的效率，特别是对于开放寻址法来说。可见，哈希函数的选择对哈希表至关重要。</p>
+<h4 id="pydictentry">PYDICTENTRY</h4>
+<p>字典中的一个key-value键值对元素称为 entry（也叫做 slots），对应到 Python 内部是 <code>PyDictEntry</code>，<code>PyDictObject</code> 就是 <code>PyDictEntry</code> 的集合。<code>PyDictEntry</code> 的定义是：</p>
+<pre><code class="language-c">typedef struct {
+    /* Cached hash code of me_key.  Note that hash codes are C longs.
+     * We have to use Py_ssize_t instead because dict_popitem() abuses
+     * me_hash to hold a search finger.
+     */
+    Py_ssize_t me_hash;
+    PyObject *me_key;
+    PyObject *me_value;
+} PyDictEntry;
+</code></pre>
+<p>me_hash用于缓存me_key的哈希值，防止每次查询时都要计算哈希值，entry有三种状态。</p>
+<ol>
+<li>
+<p>Unused： me_key == me_value == NULL</p>
+<p>Unused是entry的初始状态，key和value都为NULL。这是me_key为NULL的唯一情况。 插入元素时，Unused状态转换成Active状态。</p>
+</li>
+<li>
+<p>Active: me_key != NULL and me_key != dummy and me_value != NULL</p>
+<p>插入元素后，entry就成了Active状态，这是me_value唯一不为NULL的情况，删除元素时Active状态刻转换成Dummy状态。</p>
+</li>
+<li>
+<p>Dummy: me_key == dummy and me_value == NULL</p>
+<p>此处的dummy对象实际上一个<code>PyStringObject</code>对象，仅作为指示标志。Dummy状态的元素可以在插入元素的时候将它变成Active状态，但它不可能再变成Unused状态。</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20200820150305.png" alt="image-20200819215942008" loading="lazy"></figure>
+<p>为啥要有 Dummy 状态呢？</p>
+<p><strong>首先明确 Dummy 是一种类似伪删除的方式，保证了探测链的连续性。</strong> 下面详细解释：</p>
+<p>在开放寻址法中，遇到hash冲突时会通过探测函数找到下一个合适的位置。</p>
+<p>例如，某元素通过 hash 计算应该插入 A，但A处已经有元素，则继续根据探测函数找到 B，B处也有元素，直到	找到位置C 为止。此时 ABC 构成了探测链。 查找时，如果元素的hash值相同，那么也是顺着这个链不断往下找，当删除探测链中的某个元素时，比如删除 B ，如果直接把 B 从hash表中删除，变成 Unused 状态，那么 C 就找不到了，因为AC之间出现了断裂的现象。</p>
+<h4 id="pydictobject">PYDICTOBJECT</h4>
+<p><code>PyDictObject</code>就是<code>PyDictEntry</code>对象的集合，<code>PyDictObject</code>的结构是：</p>
+<pre><code class="language-c">typedef struct _dictobject PyDictObject;
+struct _dictobject {
+    PyObject_HEAD
+    Py_ssize_t ma_fill;  /* # Active + # Dummy */
+    Py_ssize_t ma_used;  /* # Active */
+
+    /* The table contains ma_mask + 1 slots, and that's a power of 2.
+     * We store the mask instead of the size because the mask is more
+     * frequently needed.
+     */
+    Py_ssize_t ma_mask;
+
+    /* ma_table points to ma_smalltable for small tables, else to
+     * additional malloc'ed memory.  ma_table is never NULL!  This rule
+     * saves repeated runtime null-tests in the workhorse getitem and
+     * setitem calls.
+     */
+    PyDictEntry *ma_table;
+    PyDictEntry *(*ma_lookup)(PyDictObject *mp, PyObject *key, long hash);
+    PyDictEntry ma_smalltable[PyDict_MINSIZE];
+};
+</code></pre>
+<ul>
+<li>
+<p>ma_fill ：所有处于Active以及Dummy的元素个数</p>
+</li>
+<li>
+<p>ma_used ：所有处于Active状态的元素个数</p>
+</li>
+<li>
+<p>ma_mask ：所有entry的元素个数（Active+Dummy+Unused）</p>
+</li>
+<li>
+<p>ma_smalltable：创建字典对象时，一定会创建一个大小为<code>PyDict_MINSIZE==8</code>的<code>PyDictEntry</code>数组。</p>
+</li>
+<li>
+<p>ma_table：当entry数量小于<code>PyDict_MINSIZE</code>，ma_table指向ma_smalltable的首地址，当entry数量大于8时，Python把它当做一个大字典来处理，此刻会申请额外的内存空间，同时将ma_table指向这块空间。</p>
+</li>
+<li>
+<p>ma_lookup：字典元素的搜索策略</p>
+<p><code>PyDictObject</code>使用<code>PyObject_HEAD</code>而不是<code>PyObject_Var_HEAD</code>，虽然字典也是变长对象，但此处并不是通过ob_size来存储字典中元素的长度，而是通过ma_used字段。</p>
+</li>
+</ul>
+<blockquote>
+<p>衡量哈希表的冲突率的一个指标是哈希表的<strong>负载因子</strong>，它等于哈希表已使用的空间除以哈希表的总空间。直观上来说，它反映了哈希表中的一个位置平均储存的数据个数。当负载因子的值大于 2/3 时，哈希发生冲突的概率就将大大增加。因此，当 dict 中的哈希表负载因子大于 2/3 时，解释器会重新分配哈希表的大小使其负载因子小于 2/3。</p>
+</blockquote>
+<h4 id="pydictobject的创建过程">PYDICTOBJECT的创建过程</h4>
+<pre><code class="language-c">PyObject *
+PyDict_New(void)
+{
+    register PyDictObject *mp;
+    if (dummy == NULL) { /* Auto-initialize dummy */
+        dummy = PyString_FromString(&quot;&lt;dummy key&gt;&quot;);
+        if (dummy == NULL)
+            return NULL;
+    }
+    if (numfree) {
+        mp = free_list[--numfree];
+        assert (mp != NULL);
+        assert (Py_TYPE(mp) == &amp;PyDict_Type);
+        _Py_NewReference((PyObject *)mp);
+        if (mp-&gt;ma_fill) {
+            EMPTY_TO_MINSIZE(mp);
+        } else {
+            /* At least set ma_table and ma_mask; these are wrong
+               if an empty but presized dict is added to freelist */
+            INIT_NONZERO_DICT_SLOTS(mp);
+        }
+        assert (mp-&gt;ma_used == 0);
+        assert (mp-&gt;ma_table == mp-&gt;ma_smalltable);
+        assert (mp-&gt;ma_mask == PyDict_MINSIZE - 1);
+    } else {
+        mp = PyObject_GC_New(PyDictObject, &amp;PyDict_Type);
+        if (mp == NULL)
+            return NULL;
+        EMPTY_TO_MINSIZE(mp);
+    }
+    mp-&gt;ma_lookup = lookdict_string;
+    return (PyObject *)mp;
+}
+</code></pre>
+<ol>
+<li>初始化dummy对象</li>
+<li>如果缓冲池还有可用的对象，则从缓冲池中读取，否则，执行步骤3</li>
+<li>分配内存空间，创建<code>PyDictObject</code>对象，初始化对象</li>
+<li>指定添加字典元素时的探测函数，元素的搜索策略</li>
+</ol>
+<h4 id="字典搜索策略">字典搜索策略</h4>
+<pre><code class="language-c">static PyDictEntry *
+lookdict(PyDictObject *mp, PyObject *key, register long hash)
+{
+    register size_t i;
+    register size_t perturb;
+    register PyDictEntry *freeslot;
+    register size_t mask = (size_t)mp-&gt;ma_mask;
+    PyDictEntry *ep0 = mp-&gt;ma_table;
+    register PyDictEntry *ep;
+    register int cmp;
+    PyObject *startkey;
+
+    i = (size_t)hash &amp; mask;
+    ep = &amp;ep0[i];
+    if (ep-&gt;me_key == NULL || ep-&gt;me_key == key)
+        return ep;
+
+    if (ep-&gt;me_key == dummy)
+        freeslot = ep;
+    else {
+        if (ep-&gt;me_hash == hash) {
+            startkey = ep-&gt;me_key;
+            Py_INCREF(startkey);
+            cmp = PyObject_RichCompareBool(startkey, key, Py_EQ);
+            Py_DECREF(startkey);
+            if (cmp &lt; 0)
+                return NULL;
+            if (ep0 == mp-&gt;ma_table &amp;&amp; ep-&gt;me_key == startkey) {
+                if (cmp &gt; 0)
+                    return ep;
+            }
+            else {
+                /* The compare did major nasty stuff to the
+                 * dict:  start over.
+                 * XXX A clever adversary could prevent this
+                 * XXX from terminating.
+                 */
+                return lookdict(mp, key, hash);
+            }
+        }
+        freeslot = NULL;
+    }
+
+    /* In the loop, me_key == dummy is by far (factor of 100s) the
+       least likely outcome, so test for that last. */
+    for (perturb = hash; ; perturb &gt;&gt;= PERTURB_SHIFT) {
+        i = (i &lt;&lt; 2) + i + perturb + 1;
+        ep = &amp;ep0[i &amp; mask];
+        if (ep-&gt;me_key == NULL)
+            return freeslot == NULL ? ep : freeslot;
+        if (ep-&gt;me_key == key)
+            return ep;
+        if (ep-&gt;me_hash == hash &amp;&amp; ep-&gt;me_key != dummy) {
+            startkey = ep-&gt;me_key;
+            Py_INCREF(startkey);
+            cmp = PyObject_RichCompareBool(startkey, key, Py_EQ);
+            Py_DECREF(startkey);
+            if (cmp &lt; 0)
+                return NULL;
+            if (ep0 == mp-&gt;ma_table &amp;&amp; ep-&gt;me_key == startkey) {
+                if (cmp &gt; 0)
+                    return ep;
+            }
+            else {
+                /* The compare did major nasty stuff to the
+                 * dict:  start over.
+                 * XXX A clever adversary could prevent this
+                 * XXX from terminating.
+                 */
+                return lookdict(mp, key, hash);
+            }
+        }
+        else if (ep-&gt;me_key == dummy &amp;&amp; freeslot == NULL)
+            freeslot = ep;
+    }
+    assert(0);          /* NOT REACHED */
+    return 0;
+}
+</code></pre>
+<p>字典在添加元素和查询元素时，都需要用到字典的搜索策略。</p>
+<p>搜索时，如果不存在该key，那么返回Unused状态的entry，如果存在该key，但是key是一个Dummy对象，那么返回Dummy状态的entry，其他情况就表示存在Active状态的entry，那么对于字典的插入操作，针对不同的情况进行操作也不一样。对于Active的entry，直接替换me_value值即可；对于Unused或Dummy的entry，需要同时设置me_key，me_hash和me_value</p>
+<h4 id="pydictobject对象缓冲池">PYDICTOBJECT对象缓冲池</h4>
+<p><code>PyDictObject</code>对象缓冲池和<code>PyListObject</code>对象缓冲池的原理是类似的，都是在对象被销毁的时候把该对象添加到缓冲池中去，而且只保留<code>PyDictObject</code>对象本身，如果ma_table维护的是从系统堆中申请的空间，那么Python会释放这块内存，如果ma_table维护的是ma_smalltable，那么只需把smalltable中的元素的引用计数减少即可。</p>
+<pre><code class="language-c">static void
+dict_dealloc(register PyDictObject *mp)
+{
+    register PyDictEntry *ep;
+    Py_ssize_t fill = mp-&gt;ma_fill;
+    PyObject_GC_UnTrack(mp);
+    Py_TRASHCAN_SAFE_BEGIN(mp)
+    for (ep = mp-&gt;ma_table; fill &gt; 0; ep++) {
+        if (ep-&gt;me_key) {
+            --fill;
+            Py_DECREF(ep-&gt;me_key);
+            Py_XDECREF(ep-&gt;me_value);
+        }
+    }
+    if (mp-&gt;ma_table != mp-&gt;ma_smalltable)
+        PyMem_DEL(mp-&gt;ma_table);
+    if (numfree &lt; PyDict_MAXFREELIST &amp;&amp; Py_TYPE(mp) == &amp;PyDict_Type)
+        free_list[numfree++] = mp;
+    else
+        Py_TYPE(mp)-&gt;tp_free((PyObject *)mp);
+    Py_TRASHCAN_SAFE_END(mp)
+}
+</code></pre>
+<p>为了避免频繁申请、释放内存，导致过多的系统调用，在 CPython 中，很多内建对象都有自己的缓存池。例如，整数有针对小整数的缓存池([-5, 256])，字符串有针对短字符串的缓存池，同样，dict 也有自己的缓存池.</p>
+<h3 id="列表的内部实现">列表的内部实现</h3>
+<p>Python中的列表基于<code>PyListObject</code>实现，列表支持元素的插入、删除、更新操作，因此<code>PyListObject</code>是一个变长对象（<strong>列表的长度随着元素的增加和删除而变长和变短</strong>），同时它还是一个可变对象（列表中的元素根据列表的操作而发生变化，内存大小动态的变化）</p>
+<p>PyListObject的定义：</p>
+<pre><code class="language-c">typedef struct {
+    # 列表对象引用计数
+    int ob_refcnt;  
+    # 列表类型对象      
+    struct _typeobject *ob_type;
+    # 列表元素的长度
+    int ob_size; /* Number of items in variable part */
+    # 真正存放列表元素容器的指针，list[0] 就是 ob_item[0]
+    PyObject **ob_item;
+    # 当前列表可容纳的元素大小
+    Py_ssize_t allocated;
+} PyListObject;
+</code></pre>
+<p>咋一看PyListObject对象的定义非常简单，除了通用对象都有的引用计数（<code>ob_refcnt</code>）、类型信息（ob_type），以及变长对象的长度（ob_size）之外，剩下的只有ob_item，和 allocated，ob_item是真正存放列表元素容器的指针，专门有一块内存用来存储列表元素，这块内存的大小就是allocated所能容纳的空间。allocated是列表所能容纳的元素大小，而且满足条件：</p>
+<ul>
+<li><strong>0 &lt;= ob_size &lt;= allocated</strong></li>
+<li><strong>len(list) == ob_size</strong></li>
+<li><strong>ob_item == NULL 时 ob_size == allocated == 0</strong></li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20200820150004.jpg" alt="pylistobject" loading="lazy"></figure>
+<h4 id="列表对象的创建">列表对象的创建</h4>
+<p><code>PylistObject</code>对象的是通过函数<code>PyList_New</code>创建而成，接收参数<strong>size</strong>，该参数用于指定列表对象所能容纳的最大元素个数。</p>
+<pre><code class="language-c">// 列表缓冲池, PyList_MAXFREELIST为80
+static PyListObject *free_list[PyList_MAXFREELIST];
+//缓冲池当前大小
+static int numfree = 0;
+
+PyObject *PyList_New(Py_ssize_t size)
+{
+    PyListObject *op; //列表对象
+    size_t nbytes;    //创建列表对象需要分配的内存大小
+
+    if (size &lt; 0) {
+        PyErr_BadInternalCall();
+        return NULL;
+    }
+    /* Check for overflow without an actual overflow,
+     *  which can cause compiler to optimise out */
+    if ((size_t)size &gt; PY_SIZE_MAX / sizeof(PyObject *))
+        return PyErr_NoMemory();
+    nbytes = size * sizeof(PyObject *);
+    if (numfree) {
+        numfree--;
+        op = free_list[numfree];
+        _Py_NewReference((PyObject *)op);
+
+    } else {
+        op = PyObject_GC_New(PyListObject, &amp;PyList_Type);
+        if (op == NULL)
+            return NULL;
+
+    }
+    if (size &lt;= 0)
+        op-&gt;ob_item = NULL;
+    else {
+        op-&gt;ob_item = (PyObject **) PyMem_MALLOC(nbytes);
+        if (op-&gt;ob_item == NULL) {
+            Py_DECREF(op);
+            return PyErr_NoMemory();
+        }
+        memset(op-&gt;ob_item, 0, nbytes);
+    }
+    # 设置ob_size
+    Py_SIZE(op) = size;
+    op-&gt;allocated = size;
+    _PyObject_GC_TRACK(op);
+    return (PyObject *) op;
+}
+</code></pre>
+<p><strong>创建过程</strong>大致是：</p>
+<ol>
+<li>检查size参数是否有效，如果小于0，直接返回NULL，创建失败</li>
+<li>检查size参数是否超出Python所能接受的大小，如果大于PY_SIZE_MAX（64位机器为8字节，在32位机器为4字节），内存溢出。</li>
+<li>检查缓冲池free_list是否有可用的对象，有则直接从缓冲池中使用，没有则创建新的PyListObject，分配内存。</li>
+<li>初始化ob_item中的元素的值为Null</li>
+<li>设置PyListObject的allocated和ob_size。</li>
+</ol>
+<h4 id="pylistobject对象的缓冲池">PYLISTOBJECT对象的缓冲池</h4>
+<p><code>free_list</code>是<code>PyListObject</code>对象的缓冲池，<strong>其大小为80</strong>，那么PyListObject对象是什么时候加入到缓冲池free_list的呢？答案在<code>list_dealloc</code>方法中：</p>
+<pre><code class="language-c">static void
+list_dealloc(PyListObject *op)
+{
+    Py_ssize_t i;
+    PyObject_GC_UnTrack(op);
+    Py_TRASHCAN_SAFE_BEGIN(op)
+    if (
+        i = Py_SIZE(op);
+        while (--i &gt;= 0) {
+            Py_XDECREF(op-&gt;ob_item[i]);
+        }
+        PyMem_FREE(op-&gt;ob_item);
+    }
+    if (numfree &lt; PyList_MAXFREELIST &amp;&amp; PyList_CheckExact(op))
+        free_list[numfree++] = op;
+    else
+        Py_TYPE(op)-&gt;tp_free((PyObject *)op);
+    Py_TRASHCAN_SAFE_END(op)
+}
+</code></pre>
+<p>当PyListObject对象被销毁的时候，首先将列表中所有元素的引用计数减一，然后释放ob_item占用的内存，只要缓冲池空间还没满，那么就把该PyListObject加入到缓冲池中（此时PyListObject占用的内存并不会正真正回收给系统，下次创建PyListObject优先从缓冲池中获取PyListObject），否则释放PyListObject对象的内存空间。</p>
+<h4 id="列表元素插入">列表元素插入</h4>
+<p>设置列表某个位置的值时，如“list[1]=0”，列表的内存结构并不会发生变化，而往列表中插入元素时会改变列表的内存结构：</p>
+<pre><code class="language-c">static int
+ins1(PyListObject *self, Py_ssize_t where, PyObject *v)
+{
+    // n是列表元素长度
+    Py_ssize_t i, n = Py_SIZE(self);
+    PyObject **items;
+    if (v == NULL) {
+        PyErr_BadInternalCall();
+        return -1;
+    }
+    if (n == PY_SSIZE_T_MAX) {
+        PyErr_SetString(PyExc_OverflowError,
+            &quot;cannot add more objects to list&quot;);
+        return -1;
+    }
+
+    if (list_resize(self, n+1) == -1)
+        return -1;
+
+    if (where &lt; 0) {
+        where += n;
+        if (where &lt; 0)
+            where = 0;
+    }
+    if (where &gt; n)
+        where = n;
+    items = self-&gt;ob_item;
+    for (i = n; --i &gt;= where; )
+        items[i+1] = items[i];
+    Py_INCREF(v);
+    items[where] = v;
+    return 0;
+}
+</code></pre>
+<p>相比设置某个列表位置的值来说，<strong>插入操作要多一次PyListObject容量大小的调整，逻辑是list_resize</strong>，其次是挪动where之后的元素位置。</p>
+<pre><code class="language-c">// newsize： 列表新的长度
+static int  
+list_resize(PyListObject *self, Py_ssize_t newsize)
+{
+    PyObject **items;
+    size_t new_allocated;
+    Py_ssize_t allocated = self-&gt;allocated;
+
+
+    if (allocated &gt;= newsize &amp;&amp; newsize &gt;= (allocated &gt;&gt; 1)) {
+        assert(self-&gt;ob_item != NULL || newsize == 0);
+        Py_SIZE(self) = newsize;
+        return 0;
+    }
+
+    new_allocated = (newsize &gt;&gt; 3) + (newsize &lt; 9 ? 3 : 6);
+
+    /* check for integer overflow */
+    if (new_allocated &gt; PY_SIZE_MAX - newsize) {
+        PyErr_NoMemory();
+        return -1;
+    } else {
+        new_allocated += newsize;
+    }
+
+    if (newsize == 0)
+        new_allocated = 0;
+    items = self-&gt;ob_item;
+    if (new_allocated &lt;= (PY_SIZE_MAX / sizeof(PyObject *)))
+        PyMem_RESIZE(items, PyObject *, new_allocated);
+    else
+        items = NULL;
+    if (items == NULL) {
+        PyErr_NoMemory();
+        return -1;
+    }
+    self-&gt;ob_item = items;
+    Py_SIZE(self) = newsize;
+    self-&gt;allocated = new_allocated;
+    return 0;
+}
+</code></pre>
+<p>满足 <code>allocated &gt;= newsize &amp;&amp; newsize &gt;= (allocated /2)</code>时，简单改变list的元素长度，PyListObject对象不会重新分配内存空间，否则重新分配内存空间，如果<code>newsize&lt;allocated/2</code>，那么会减缩内存空间，如果<code>newsize&gt;allocated</code>，就会扩大内存空间。当<code>newsize==0</code>时内存空间将缩减为0。</p>
+<figure data-type="image" tabindex="3"><img src="https://raw.githubusercontent.com/Littlecowherd/Images/master/markdown20200820150338.jpg" alt="!python_list_resize" loading="lazy"></figure>
+<pre><code class="language-python">def list_resize(new_size):
+    if new_size == 0:
+        new_allocated = 0
+    else:
+         # 随着size增长，负载因子趋向 8/9
+        new_allocated = (new_size &gt;&gt; 3) + (3 if new_size &lt; 9 else 6) + new_size 
+    print(new_size, new_allocated, new_size / new_allocated if new_allocated != 0 else None)
+</code></pre>
+<h4 id="总结">总结</h4>
+<ul>
+<li>PyListObject缓冲池的创建发生在列表销毁的时候。</li>
+<li>PyListObject对象的创建分两步：先创建PyListObject对象，然后初始化元素列表为NULL。</li>
+<li>PyListObject对象的销毁分两步：先销毁PyListObject对象中的元素列表，然后销毁PyListObject本身。</li>
+<li>PyListObject对象内存的占用空间会根据列表长度的变化而调整。</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li>https://foofish.net/python_dict_implements.html</li>
+<li>https://foofish.net/python-list-implements.html</li>
+<li>https://arianx.me/2018/12/30/walkthrough-cpython3.7-dict-source-code/</li>
+<li>https://www.hongweipeng.com/index.php/series.html</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[初始 Hugo]]></title>
         <id>https://Littlecowherd.github.io/post/R-OzPVSh7/</id>
